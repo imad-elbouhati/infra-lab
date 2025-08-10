@@ -1,0 +1,25 @@
+---
+- name: sshd_config
+  ansible.builtin.template:
+    src: ../files/sshd_config.j2
+    dest: /etc/ssh/sshd_config
+    owner: root
+    group: root
+    mode: '644'
+  notify:  restart sshd
+
+- name: install fail2ban
+  ansible.builtin.apt:
+    name: fail2ban
+    state: present
+    update_cache: yes
+  notify: restart fail2ban
+
+- name: configure fail2ban
+  ansible.builtin.template:
+    src: ../files/sshd.local.j2
+    dest: /etc/fail2ban/jail.d/sshd.local
+    owner: root
+    group: root
+    mode: '644'
+  notify:  restart fail2ban

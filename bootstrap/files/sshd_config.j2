@@ -1,0 +1,9 @@
+Port {{ ansible_port }}
+PasswordAuthentication no
+PermitRootLogin prohibit-password
+KbdInteractiveAuthentication no
+UsePAM no
+X11Forwarding yes
+PrintMotd no
+AcceptEnv LANG LC_*
+Subsystem	sftp	/usr/lib/openssh/sftp-server

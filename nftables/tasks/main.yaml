@@ -1,0 +1,7 @@
+---
+- name: install nftables
+  ansible.builtin.apt:
+    name: nftables
+    state: present
+    update_cache: yes
+  notify: restart nftables
