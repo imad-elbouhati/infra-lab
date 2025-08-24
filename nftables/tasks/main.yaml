@@ -5,3 +5,17 @@
     state: present
     update_cache: yes
   notify: restart nftables
+  vars: 
+    skip_nft_install: false
+  when: skip_nft_install
+
+- name: copy ntftable configuration
+  ansible.builtin.template:
+    src: ../files/input.j2
+    dest: /tmp/input.nft
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Load nftable rules
+  ansible.builtin.command: nft -f /tmp/input.nft
