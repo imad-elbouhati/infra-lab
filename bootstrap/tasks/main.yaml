@@ -12,7 +12,7 @@
   ansible.builtin.apt:
     name: fail2ban
     state: present
-    update_cache: yes
+    update_cache: no 
   notify: restart fail2ban
 
 - name: configure fail2ban
@@ -23,3 +23,8 @@
     group: root
     mode: '644'
   notify:  restart fail2ban
+
+- name: Set a hostname specifying strategy
+  ansible.builtin.hostname:
+    name: infra-lab
+    use: systemd
