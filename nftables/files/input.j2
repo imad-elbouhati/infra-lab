@@ -1,8 +1,9 @@
 flush ruleset
 
 table inet filter {
-    counter cnt_ssh {
-        
+    counter cnt_ssh {   
+    }
+    counter cnt_wireguard {
     }
     chain input {
         type filter hook input priority filter; policy accept;
@@ -10,6 +11,18 @@ table inet filter {
         ct state invalid counter drop
         iif lo counter accept
         ct state new tcp dport { {{ ansible_port }}, 8080 } counter name cnt_ssh accept
+        udp dport 51820 counter name cnt_wireguard accept
+        iifname "wg0" ip daddr 10.43.43.1 counter name cnt_wireguard accept
         drop
+    }
+    chain forward {
+        type filter hook forward priority filter; policy drop;
+        ct state vmap { invalid : drop, established : accept, related : accept }
+        iifname "wg0" accept
+    }
+
+    chain postrouting {
+        type nat hook postrouting priority srcnat; policy accept;
+        masquerade
     }
 }
