@@ -12,7 +12,7 @@
   ansible.builtin.apt:
     name: fail2ban
     state: present
-    update_cache: yes
+    update_cache: no 
   notify: restart fail2ban
 
 - name: configure fail2ban
@@ -24,9 +24,16 @@
     mode: '644'
   notify:  restart fail2ban
 
+
 - ansible.posix.sysctl:
     name: net.ipv4.ip_forward
     value: '1'
     sysctl_set: true
     state: present
     reload: true
+
+- name: Set VPS hostname
+  ansible.builtin.hostname:
+    name: infra-lab
+    use: systemd
+
