@@ -23,6 +23,6 @@ table inet filter {
 
     chain postrouting {
         type nat hook postrouting priority srcnat; policy accept;
-        masquerade
+        oifname != "lo" masquerade
     }
 }
