@@ -1,2 +1,4 @@
 *.secret
 .venv
+wireguard/files/client
+inventory/group_vars/main/var.yaml
