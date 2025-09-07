@@ -13,6 +13,7 @@ table inet filter {
         ct state new tcp dport { {{ ansible_port }}, 8080 } counter name cnt_ssh accept
         udp dport 51820 counter name cnt_wireguard accept
         iifname "wg0" ip daddr 10.43.43.1 counter name cnt_wireguard accept
+        tcp dport 5432 counter accept
         drop
     }
     chain forward {
