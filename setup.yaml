@@ -2,3 +2,5 @@
   roles:
     - bootstrap
     - nftables
+    - wireguard
+    - postgres
