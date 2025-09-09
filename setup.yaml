@@ -4,3 +4,4 @@
     - nftables
     - wireguard
     - postgres
+    - gitlab
