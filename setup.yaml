@@ -1,7 +1,8 @@
 - hosts: main
   roles:
-    - bootstrap
-    - nftables
-    - wireguard
-    - postgres
-    - gitlab
+    #- bootstrap
+    #- nftables
+    #- wireguard
+    #- postgres
+    #- gitlab
+    - docker
