@@ -10,7 +10,7 @@ table inet filter {
         ct state established, related counter accept
         ct state invalid counter drop
         iif lo counter accept
-        ct state new tcp dport { {{ ansible_port }}, 8080, 443 } counter name cnt_ssh accept
+        ct state new tcp dport { {{ ansible_port }}, 8080, 443, 80 } counter name cnt_ssh accept
         udp dport 51820 counter name cnt_wireguard accept
         iifname "wg0" ip daddr 10.43.43.1 counter name cnt_wireguard accept
         tcp dport 5432 counter accept
