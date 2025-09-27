@@ -1,0 +1,8 @@
+services:
+  nginx:
+    image: nginx:alpine
+    ports:
+      - "80:80"
+    volumes:
+      - ${HOME}/docker-compose/configs:/etc/nginx/conf.d/
+    restart: unless-stopped
