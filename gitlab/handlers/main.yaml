@@ -1,7 +1,0 @@
-- name: Wait for GitLab to reconfigure
-  ansible.builtin.wait_for:
-    host: "{{ ansible_host }}"
-    port: 80
-    delay: 30
-    timeout: 600
-    state: started
