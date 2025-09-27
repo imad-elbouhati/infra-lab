@@ -1,0 +1,18 @@
+- name: Copy reverse proxy configuration
+  ansible.builtin.copy:
+    src: ../files/reverse-proxy.conf
+    dest: ${HOME}/docker-compose/configs/
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Copy docker compose file
+  ansible.builtin.copy:
+    src: ../template/docker-compose.yml
+    dest: ${HOME}/docker-compose/
+    owner: root
+    group: root
+    mode: '644'
+
+- name: run nginx
+  ansible.builtin.shell: "cd ${HOME}/docker-compose/ && docker compose down && docker compose up -d"
