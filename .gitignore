@@ -2,3 +2,4 @@
 .venv
 wireguard/files/client
 inventory/group_vars/main/var.yaml
+certbot/vars/cloudflare.ini
