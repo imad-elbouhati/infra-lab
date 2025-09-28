@@ -1,0 +1,37 @@
+- name: Ensure certbot directory exists
+  ansible.builtin.file:
+    path: /opt/certbot
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Ensure secrets directory exists
+  ansible.builtin.file:
+    path: /opt/certbot/secrets
+    state: directory
+    owner: root
+    group: root
+    mode: '700'
+
+- name: Copy Cloudflare credentials
+  ansible.builtin.copy:
+    src: ../vars/cloudflare.ini
+    dest: /opt/certbot/secrets/certbot/cloudflare.ini
+    owner: root
+    group: root
+    mode: '600'
+
+- name: Deploy docker-compose.yml for Certbot
+  ansible.builtin.copy:
+    src: ../files/docker-compose.yml
+    dest: /opt/certbot/docker-compose.yml
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Run Certbot via Docker Compose
+  ansible.builtin.shell: |
+    docker compose down && docker compose up -d
+  args:
+    chdir: /opt/certbot

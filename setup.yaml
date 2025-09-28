@@ -5,3 +5,5 @@
     - wireguard
     - postgres
     - gitlab
+    - nginx-reverse-proxy
+    - certbot

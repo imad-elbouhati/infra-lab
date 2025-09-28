@@ -1,0 +1,17 @@
+services:
+  certbot:
+    image: certbot/dns-cloudflare:v4.0.0
+    volumes:
+      - "/etc/letsencrypt:/etc/letsencrypt"
+      - "/var/lib/letsencrypt:/var/lib/letsencrypt"
+      - ./secrets:/secrets:ro 
+    command: >
+      certonly
+      --dns-cloudflare
+      --dns-cloudflare-credentials /secrets/certbot/cloudflare.ini
+      --non-interactive
+      --agree-tos
+      --email elbouhatiimad@gmail.com
+      -d *.infra-lab.space
+      -d infra-lab.space
+    network_mode: host
