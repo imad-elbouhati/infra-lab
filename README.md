@@ -1,35 +1,33 @@
-# Infrastructure automation lab using **Ansible** and **Docker**.
+# Infrastructure Automation Lab
 
-This repository contains Ansible playbooks and roles to build an infra lab including:
-- WireGuard tunnels
-- nftables firewall rules
-- Docker & Docker Compose apps
-- Nginx reverse proxy for routing
-- GitLab Runners (Docker executor)
-- TLS/SSL automation with Let’s Encrypt and CertBot (ACME)
+This project demonstrates how to automate provisioning and management of infrastructure using **Ansible** and **Docker**.  
+It’s designed as a hands-on home lab to explore DevOps, networking, and security practices, including VPNs, firewalls, CI/CD pipelines, and automated TLS management.
 
----
+## Architecture Evolution
+
+This lab is a **work in progress** and the architecture evolves as I explore new tools, practices, and designs.  
+The diagram below represents the current state of the lab:
+
+![Lab Architecture](./images/archi.png)
 
 ## Features
-- Automated provisioning with Ansible
-- VPN and firewall configuration
-- Containerized services using Docker Compose
-- Reverse proxy with automatic TLS certificates
-- GitLab Runner deployment and registration
-- Inventory-driven configuration with Ansible Vault support for secrets
-- SSH hardening (disable root login, enforce key-based auth, configurable settings)
----
+- Automated provisioning with **Ansible**
+- Secure connectivity with **WireGuard VPN**
+- Firewall configuration via **nftables**
+- Containerized services managed by **Docker Compose**
+- **Nginx reverse proxy** with automatic TLS certificates (Let’s Encrypt / Certbot ACME)
+- **GitLab Runner** deployment and registration
+- **SSH hardening** (disable root login, enforce key-based auth, customizable settings)
+- Inventory-driven configuration with **Ansible Vault** support for secrets
 
 ## Requirements
-- Ansible (>= 2.12)
+- **Ansible** (>= 2.12)
 - SSH access and sudo/root privileges on managed hosts
 - DNS records pointing to proxy host for TLS validation
-- GitLab instance or gitlab.com with a registration token
+- GitLab instance or [gitlab.com](https://gitlab.com) with a registration token
 
 Optional:
-- Ansible Vault for sensitive values (tokens, keys, certs)
-
----
+- **Ansible Vault** for managing sensitive values (tokens, keys, certs)
 
 ## Usage
 1. Define your hosts in `inventory/hosts.yaml`
