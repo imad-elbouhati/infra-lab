@@ -1,4 +1,4 @@
-# Infrastructure Automation Lab using **Ansible** and **Docker**
+# Infrastructure Automation Lab
 
 This project demonstrates how to automate provisioning and management of infrastructure using **Ansible** and **Docker**.  
 It’s designed as a hands-on home lab to explore DevOps, networking, and security practices, including VPNs, firewalls, CI/CD pipelines, and automated TLS management.
