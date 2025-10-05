@@ -1,9 +1,9 @@
 - hosts: main
   roles:
-    # - bootstrap
-    # - nftables
-    # - wireguard
-    # - postgres
-     - nginx-reverse-proxy
-    # - certbot
-    # - gitlab-runner
+    - bootstrap
+    - nftables
+    - wireguard
+    - postgres
+    - nginx-reverse-proxy
+    - certbot
+    - gitlab-runner
