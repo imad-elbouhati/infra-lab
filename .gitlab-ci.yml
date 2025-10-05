@@ -1,0 +1,7 @@
+stages:
+  - test
+
+test_runner:
+  stage: test
+  script:
+    - echo "Runner is working!!"
