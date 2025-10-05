@@ -4,6 +4,6 @@
     - nftables
     - wireguard
     - postgres
-    - gitlab
     - nginx-reverse-proxy
     - certbot
+    - gitlab-runner
