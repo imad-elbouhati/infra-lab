@@ -7,4 +7,5 @@ services:
     volumes:
       - ${HOME}/docker-compose/configs:/etc/nginx/conf.d/
       - /etc/letsencrypt:/etc/letsencrypt:ro
+      - /var/www/html:/var/www/html
     restart: unless-stopped

@@ -6,6 +6,14 @@
     group: root
     mode: '644'
 
+- name: Copy index.html
+  ansible.builtin.copy:
+    src: ../files/index.html
+    dest: /var/www/html/
+    owner: root
+    group: root
+    mode: '644'
+
 - name: Copy docker compose file
   ansible.builtin.copy:
     src: ../template/docker-compose.yml
