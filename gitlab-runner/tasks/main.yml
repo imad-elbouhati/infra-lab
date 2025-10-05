@@ -1,0 +1,38 @@
+- name: Ensure gitlab-runner directory exists
+  ansible.builtin.file:
+    path: /opt/gitlab-runner/
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Ensure config directory exists
+  ansible.builtin.file:
+    path: /opt/gitlab-runner/config
+    state: directory
+    owner: root
+    group: root
+    mode: '755'
+
+- name: Copy GitLab Runner configuration
+  ansible.builtin.template:
+    src: ../template/config.toml.j2
+    dest: /opt/gitlab-runner/config/config.toml
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Copy Docker Compose file for GitLab Runner
+  ansible.builtin.copy:
+    src: ../template/docker-compose.yaml
+    dest: /opt/gitlab-runner/docker-compose.yaml
+    owner: root
+    group: root
+    mode: '644'
+
+- name: Start GitLab Runner
+  ansible.builtin.shell: |
+    docker compose down && \
+    docker compose up -d
+  args:
+    chdir: /opt/gitlab-runner
