@@ -4,4 +4,4 @@ stages:
 test_runner:
   stage: test
   script:
-    - echo "Runner is working!"
+    - echo "Runner is working!!"
