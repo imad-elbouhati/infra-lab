@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <title>do-p.com</title>
+    <style>
+        html {
+            max-width: 60ch;
+            margin: 2rem auto;
+            padding: 1rem;
+            font-family: monospace;
+            font-size: clamp(1em, 1vw + 0.5em, 1.25em);
+            color: #333;
+            background: #f9f9f9;
+        }
+
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+        }
+
+        header {
+            font-size: 2em;
+            font-weight: bold;
+            color: #FF6F61; /* Coral Pink */
+            margin-bottom: 1.5rem;
+        }
+
+        .ascii {
+            color: #FF6F61; /* Coral Pink */
+            text-align: center;
+            white-space: pre;
+            line-height: 1.1;
+            margin-bottom: 2rem;
+        }
+
+        .blink {
+            animation: blink 1s ease-in-out infinite alternate;
+        }
+
+        @keyframes blink { 
+            to { opacity: 0; } 
+        }
+
+        .info {
+            text-align: center;
+            line-height: 1.5;
+            color: #333;
+        }
+
+        .info a {
+            color: #FF6F61;
+            text-decoration: none;
+        }
+
+        .info a:hover {
+            text-decoration: underline;
+        }
+
+        .keyword {
+            color: #FF6F61;
+            font-weight: bold;
+        }
+
+        ul {
+            list-style: none;
+            padding: 0;
+            margin-top: 0.5rem;
+        }
+
+        ul li {
+            margin: 0.25rem 0;
+        }
+    </style>
+</head>
+<body>
+
+
+    <div class="ascii blink">
+<pre>
+  __
+ ** ****     ****     **     *******  
+/**/**/**   **/**    ****   /**////** 
+/**/**//** ** /**   **//**  /**    /**
+/**/** //***  /**  **  //** /**    /**
+/**/**  //*   /** **********/**    /**
+/**/**   /    /**/**//////**/**    ** 
+/**/**        /**/**     /**/*******  
+// //         // //      // ///////   
+</pre>
+    </div>
+
+    <div class="info">
+        <p>This website is running inside its own <span class="keyword">Docker container</span>,</p>
+        <p>behind a <span class="keyword">Nginx reverse proxy</span> with <span class="keyword">Docker provider</span>,</p>
+        <p>with automatic <span class="keyword">TLS certificate</span> from <span class="keyword">Let's Encrypt</span>,</p>
+        <p>to a server managed with <span class="keyword">Ansible</span>.</p>
+
+        <p>Contact me:</p>
+        <ul>
+            <li><a href="https://www.linkedin.com/in/imad-el-bouhati/" target="_blank">LinkedIn</a></li>
+            <li><a href="https://gitlab.com/imad-elbouhati/infra-lab" target="_blank">GitLab</a></li>
+            <li><a href="https://github.com/imad-elbouhati/infra-lab" target="_blank">Repository</a></li>
+        </ul>
+    </div>
+
+</body>
+</html>
