@@ -5,6 +5,7 @@
     owner: root
     group: root
     mode: '644'
+  notify: Check Nginx configuration syntax
 
 - name: Copy index.html
   ansible.builtin.copy:
