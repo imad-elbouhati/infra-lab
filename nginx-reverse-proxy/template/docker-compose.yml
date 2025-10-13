@@ -1,6 +1,8 @@
 services:
   nginx:
     image: nginx:alpine
+    container_name: nginx-proxy
+    network_mode: "host"
     ports:
       - "80:80"
       - "443:443"
