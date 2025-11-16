@@ -20,6 +20,7 @@ table inet filter {
         type filter hook forward priority filter; policy drop;
         ct state vmap { invalid : drop, established : accept, related : accept }
         iifname "wg0" accept
+        iifname { "docker0", "veth*", "br-*" } accept
     }
 
     chain postrouting {
