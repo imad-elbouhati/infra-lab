@@ -1,6 +1,6 @@
 - name: Check Nginx configuration syntax
   ansible.builtin.shell: |
-    docker compose exec -T nginx-proxy nginx -t
+    docker exec -T nginx-proxy nginx -t
   register: nginx_syntax_check
   failed_when: nginx_syntax_check.rc != 0
 
