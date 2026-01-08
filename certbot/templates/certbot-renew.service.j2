@@ -1,0 +1,8 @@
+[Unit]
+Description=Renew Let's Encrypt certificates (Certbot Docker)
+Wants=docker.service
+After=docker.service
+
+[Service]
+Type=oneshot
+ExecStart={{ certbot_dir }}/renew.sh

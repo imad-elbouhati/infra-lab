@@ -30,8 +30,36 @@
     group: root
     mode: '644'
 
-- name: Run Certbot via Docker Compose
-  ansible.builtin.shell: |
-    docker compose down && docker compose up -d
-  args:
-    chdir: /opt/certbot
+- name: Deploy certbot renew script
+  ansible.builtin.template:
+    src: renew.sh.j2
+    dest: "{{ certbot_dir }}/renew.sh"
+    owner: root
+    group: root
+    mode: '0755'
+
+- name: Deploy certbot renew systemd service
+  ansible.builtin.template:
+    src: certbot-renew.service.j2
+    dest: /etc/systemd/system/certbot-renew.service
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Deploy certbot renew systemd timer
+  ansible.builtin.template:
+    src: certbot-renew.timer.j2
+    dest: /etc/systemd/system/certbot-renew.timer
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Reload systemd to apply new units
+  ansible.builtin.systemd:
+    daemon_reload: true
+
+- name: Enable and start certbot renew timer
+  ansible.builtin.systemd:
+    name: certbot-renew.timer
+    enabled: true
+    state: started
