@@ -1,0 +1,3 @@
+certbot_dir: /opt/certbot
+docker_compose_bin: /usr/bin/docker
+reverse_proxy: nginx

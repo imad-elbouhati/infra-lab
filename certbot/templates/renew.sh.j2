@@ -1,0 +1,10 @@
+#!/bin/bash
+set -e
+
+cd {{ certbot_dir }}
+
+{{ docker_compose_bin }} compose run --rm certbot renew
+
+{% if reverse_proxy != "none" %}
+{{ docker_compose_bin }} compose restart {{ reverse_proxy }}
+{% endif %}
