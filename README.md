@@ -35,3 +35,4 @@ Optional:
 3. Run the bootstrap and setup playbooks:
    ```bash
    ansible-playbook -i inventory/hosts.yaml setup.yaml
+   ansible-playbook -i inventory/hosts setup.yaml --vault-password-file=vault.secret 
