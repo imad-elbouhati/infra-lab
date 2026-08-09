@@ -1,0 +1,1693 @@
+<style>
+__FONTS__
+
+/* ============================================================
+   TOKENS — light is the base; dark redefines tokens only
+   ============================================================ */
+:root {
+  --ground: #F2F5F7;
+  --surface: #FFFFFF;
+  --surface-2: #E8EDF1;
+  --ink: #0E151C;
+  --ink-2: #46535F;
+  --ink-3: #697683;
+  --rule: #D6DDE4;
+  --rule-strong: #B9C3CC;
+  --accent: #8A5A0B;
+  --accent-line: #C2892B;
+  --accent-soft: #F7EDDA;
+  --ok: #1F6B47;
+  --crit: #9B342B;
+  --shadow: 0 1px 2px rgba(14,21,28,.05), 0 8px 24px -16px rgba(14,21,28,.22);
+
+  --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --body: "Instrument Sans", ui-sans-serif, system-ui, -apple-system, sans-serif;
+  --mono: "Geist Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --measure: 60ch;
+  --pad: clamp(1.25rem, 4vw, 2.5rem);
+  --rail: 128px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --ground: #0B1116;
+    --surface: #111A21;
+    --surface-2: #17222B;
+    --ink: #E7EEF4;
+    --ink-2: #A3B2BF;
+    --ink-3: #74838F;
+    --rule: #1E2A34;
+    --rule-strong: #2E3D49;
+    --accent: #E3B05A;
+    --accent-line: #B98A3E;
+    --accent-soft: #1C1913;
+    --ok: #58BF8C;
+    --crit: #E0796C;
+    --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"] {
+  --ground: #0B1116;
+  --surface: #111A21;
+  --surface-2: #17222B;
+  --ink: #E7EEF4;
+  --ink-2: #A3B2BF;
+  --ink-3: #74838F;
+  --rule: #1E2A34;
+  --rule-strong: #2E3D49;
+  --accent: #E3B05A;
+  --accent-line: #B98A3E;
+  --accent-soft: #1C1913;
+  --ok: #58BF8C;
+  --crit: #E0796C;
+  --shadow: 0 1px 2px rgba(0,0,0,.4), 0 8px 24px -16px rgba(0,0,0,.8);
+}
+
+/* ============================================================
+   BASE
+   ============================================================ */
+* { box-sizing: border-box; }
+
+html { scroll-padding-top: 5.5rem; }
+@media (prefers-reduced-motion: no-preference) {
+  html { scroll-behavior: smooth; }
+}
+
+body {
+  margin: 0;
+  background: var(--ground);
+  color: var(--ink);
+  font-family: var(--body);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--display);
+  font-weight: 700;
+  line-height: 1.08;
+  letter-spacing: -0.022em;
+  text-wrap: balance;
+  margin: 0;
+}
+
+p { margin: 0; }
+
+a { color: inherit; }
+
+a.lnk {
+  color: var(--accent);
+  text-decoration: none;
+  border-bottom: 1px solid color-mix(in srgb, var(--accent) 32%, transparent);
+  transition: border-color .15s ease, color .15s ease;
+}
+a.lnk:hover { border-bottom-color: var(--accent); }
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+code, pre { font-family: var(--mono); }
+
+.skip {
+  position: absolute; left: -9999px; top: 0; z-index: 100;
+  background: var(--surface); color: var(--ink);
+  padding: .75rem 1rem; border: 1px solid var(--rule-strong);
+}
+.skip:focus { left: 1rem; top: 1rem; }
+
+/* ============================================================
+   SHELL / RAIL
+   ============================================================ */
+.wrap {
+  max-width: 1240px;
+  margin: 0 auto;
+  padding-inline: var(--pad);
+}
+
+.sect {
+  border-top: 1px solid var(--rule);
+  padding-block: clamp(3.5rem, 8vw, 6.5rem);
+}
+.sect:first-of-type { border-top: 0; }
+
+.sect-grid {
+  display: grid;
+  grid-template-columns: var(--rail) minmax(0, 1fr);
+  gap: clamp(1.5rem, 4vw, 3.5rem);
+}
+
+.rail {
+  font-family: var(--mono);
+  font-size: .75rem;
+  line-height: 1.5;
+  letter-spacing: .06em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+  align-self: start;
+  position: sticky;
+  top: 5.5rem;
+}
+.rail .idx {
+  display: block;
+  color: var(--accent);
+  font-variant-numeric: tabular-nums;
+  margin-bottom: .35rem;
+}
+.rail .rail-note {
+  display: block;
+  margin-top: .75rem;
+  text-transform: none;
+  letter-spacing: .01em;
+  color: var(--ink-3);
+  border-top: 1px solid var(--rule);
+  padding-top: .75rem;
+}
+
+@media (max-width: 900px) {
+  .sect-grid { grid-template-columns: minmax(0, 1fr); gap: 1.25rem; }
+  .rail { position: static; display: flex; gap: .6rem; align-items: baseline; }
+  .rail .idx { margin: 0; }
+  .rail .rail-note { display: none; }
+}
+
+/* ============================================================
+   TOPBAR
+   ============================================================ */
+.topbar {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--ground) 88%, transparent);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--rule);
+}
+.topbar-in {
+  max-width: 1240px; margin: 0 auto;
+  padding: .8rem var(--pad);
+  display: flex; align-items: center; gap: 1.5rem;
+}
+.brand {
+  display: flex; flex-direction: column; gap: .1rem;
+  text-decoration: none; margin-right: auto;
+}
+.brand b {
+  font-family: var(--display); font-size: .95rem;
+  letter-spacing: -0.01em; font-weight: 700;
+}
+.brand span {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--ink-3);
+}
+.navlinks { display: flex; gap: 1.4rem; }
+.navlinks a {
+  font-family: var(--mono); font-size: .75rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  color: var(--ink-2); text-decoration: none;
+  padding-block: .25rem;
+  border-bottom: 1px solid transparent;
+}
+.navlinks a:hover { color: var(--ink); border-bottom-color: var(--accent-line); }
+@media (max-width: 860px) { .navlinks { display: none; } }
+
+.btn {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-family: var(--mono); font-size: .75rem;
+  letter-spacing: .08em; text-transform: uppercase;
+  padding: .6rem 1rem;
+  text-decoration: none;
+  border: 1px solid var(--ink);
+  background: var(--ink); color: var(--ground);
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+  white-space: nowrap;
+}
+.btn:hover { background: transparent; color: var(--ink); }
+.btn-ghost {
+  background: transparent; color: var(--ink); border-color: var(--rule-strong);
+}
+.btn-ghost:hover { border-color: var(--ink); background: transparent; color: var(--ink); }
+
+/* ============================================================
+   HERO
+   ============================================================ */
+.hero { padding-block: clamp(3.5rem, 10vw, 7rem) clamp(3rem, 7vw, 5rem); }
+.eyebrow {
+  font-family: var(--mono); font-size: .75rem;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ink-3);
+  display: flex; align-items: center; gap: .6rem; flex-wrap: wrap;
+}
+.dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--ok); flex: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--ok) 18%, transparent);
+}
+.hero h1 {
+  font-size: clamp(2.5rem, 6vw, 4.4rem);
+  margin-block: 1.5rem 1.5rem;
+  max-width: 17ch;
+}
+.hero .lede {
+  font-size: clamp(1.0625rem, 1.6vw, 1.25rem);
+  color: var(--ink-2);
+  max-width: 58ch;
+}
+.hero .lede strong { color: var(--ink); font-weight: 600; }
+.hero-cta { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 2rem; }
+
+.evidence {
+  margin-top: clamp(2.5rem, 6vw, 4rem);
+  border-top: 1px solid var(--rule);
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+}
+.evidence a {
+  display: block; text-decoration: none;
+  padding: 1.25rem 1.25rem 1.25rem 0;
+  border-right: 1px solid var(--rule);
+  transition: background .15s ease;
+}
+.evidence a:last-child { border-right: 0; }
+.evidence a:hover { background: var(--surface); }
+.evidence .k {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--accent); display: block; margin-bottom: .5rem;
+}
+.evidence .v { font-size: .9375rem; color: var(--ink-2); line-height: 1.45; }
+.evidence .v b { color: var(--ink); font-weight: 600; display: block; }
+@media (max-width: 700px) {
+  .evidence a { border-right: 0; border-bottom: 1px solid var(--rule); padding-right: 0; }
+  .evidence a:last-child { border-bottom: 0; }
+}
+
+/* ============================================================
+   SECTION HEADS
+   ============================================================ */
+.sect-head { margin-bottom: clamp(2rem, 4vw, 3rem); }
+.sect-head h2 { font-size: clamp(1.7rem, 3.2vw, 2.4rem); max-width: 22ch; }
+.sect-head p {
+  margin-top: 1rem; color: var(--ink-2);
+  max-width: var(--measure); font-size: 1.0625rem;
+}
+
+/* ============================================================
+   SERVICES
+   ============================================================ */
+.services { display: grid; gap: 0; }
+.svc {
+  display: grid;
+  grid-template-columns: 2.5rem minmax(0, 1fr) minmax(0, 1.15fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-block: 1.75rem;
+  border-top: 1px solid var(--rule);
+  align-items: start;
+}
+.svc:last-child { border-bottom: 1px solid var(--rule); }
+.svc-n {
+  font-family: var(--mono); font-size: .75rem; color: var(--accent);
+  font-variant-numeric: tabular-nums; padding-top: .35rem;
+}
+.svc h3 { font-size: 1.25rem; letter-spacing: -0.015em; }
+.svc-body { color: var(--ink-2); font-size: .9875rem; }
+.svc-tags {
+  margin-top: .85rem; display: flex; flex-wrap: wrap; gap: .35rem;
+}
+.tag {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .05em;
+  color: var(--ink-3);
+  border: 1px solid var(--rule);
+  padding: .18rem .45rem;
+  background: var(--surface);
+}
+@media (max-width: 780px) {
+  .svc { grid-template-columns: 2rem minmax(0, 1fr); }
+  .svc-body { grid-column: 2; }
+}
+
+/* ============================================================
+   CASE STUDIES
+   ============================================================ */
+.case {
+  border: 1px solid var(--rule);
+  background: var(--surface);
+  margin-bottom: clamp(2rem, 4vw, 3rem);
+  box-shadow: var(--shadow);
+}
+.case:last-child { margin-bottom: 0; }
+
+.case-head {
+  padding: clamp(1.5rem, 3vw, 2.25rem);
+  border-bottom: 1px solid var(--rule);
+}
+.case-meta {
+  display: flex; flex-wrap: wrap; align-items: center; gap: .5rem .9rem;
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .1em; text-transform: uppercase; color: var(--ink-3);
+  margin-bottom: 1.1rem;
+}
+.case-meta .cid { color: var(--accent); }
+.case-meta .sep { color: var(--rule-strong); }
+.case-head h3 {
+  font-size: clamp(1.5rem, 3vw, 2.05rem);
+  max-width: 24ch;
+}
+.case-sub {
+  margin-top: .9rem; color: var(--ink-2);
+  max-width: var(--measure); font-size: 1.0625rem;
+}
+.case-links { display: flex; gap: 1.25rem; flex-wrap: wrap; margin-top: 1.35rem; }
+.case-links a {
+  font-family: var(--mono); font-size: .75rem;
+  letter-spacing: .06em; color: var(--accent);
+  text-decoration: none; border-bottom: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+}
+.case-links a:hover { border-bottom-color: var(--accent); }
+
+/* field grid — the datasheet */
+.fields { display: grid; }
+.field {
+  display: grid;
+  grid-template-columns: 172px minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2rem);
+  padding: 1.4rem clamp(1.5rem, 3vw, 2.25rem);
+  border-top: 1px solid var(--rule);
+}
+.field:first-child { border-top: 0; }
+.field > dt {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .11em; text-transform: uppercase;
+  color: var(--ink-3);
+  padding-top: .22rem;
+}
+.field > dd { margin: 0; color: var(--ink-2); max-width: var(--measure); }
+.field > dd > * + * { margin-top: .85rem; }
+.field strong { color: var(--ink); font-weight: 600; }
+@media (max-width: 780px) {
+  .field { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .field > dt { color: var(--accent); }
+}
+
+ul.ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: .8rem; }
+ul.ticks > li { padding-left: 1.35rem; position: relative; }
+ul.ticks > li::before {
+  content: ""; position: absolute; left: 0; top: .62em;
+  width: 6px; height: 6px; background: var(--accent-line);
+}
+ul.ticks > li b { color: var(--ink); font-weight: 600; }
+
+.stack { display: flex; flex-wrap: wrap; gap: .4rem; }
+
+pre.code {
+  margin: 0;
+  background: var(--surface-2);
+  border: 1px solid var(--rule);
+  border-left: 2px solid var(--accent-line);
+  padding: .9rem 1rem;
+  overflow-x: auto;
+  font-size: .8125rem;
+  line-height: 1.6;
+  color: var(--ink-2);
+  max-width: 100%;
+  /* show source verbatim — no != rendered as a ligature */
+  font-variant-ligatures: none;
+  font-feature-settings: "liga" 0, "calt" 0;
+}
+pre.code .cm { color: var(--ink-3); }
+pre.code .add { color: var(--ok); }
+pre.code b { color: var(--ink); font-weight: 600; }
+
+.filepath {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .04em; color: var(--ink-3);
+  margin-top: .5rem; display: block;
+}
+
+.tradeoff {
+  border: 1px solid var(--accent-line);
+  background: var(--accent-soft);
+  padding: .95rem 1.1rem;
+  font-size: .9375rem;
+  color: var(--ink-2);
+}
+.tradeoff .t-label {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .11em; text-transform: uppercase;
+  color: var(--accent); display: block; margin-bottom: .4rem;
+}
+
+.evi-list { display: grid; gap: .55rem; margin: 0; padding: 0; list-style: none; }
+.evi-list li {
+  display: grid; grid-template-columns: minmax(0,1fr) auto;
+  gap: 1rem; align-items: baseline;
+  font-size: .875rem;
+  padding-bottom: .5rem;
+  border-bottom: 1px dotted var(--rule-strong);
+}
+.evi-list code {
+  font-size: .78rem; color: var(--ink-2);
+  word-break: break-all;
+}
+.evi-list a {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: var(--accent); text-decoration: none; white-space: nowrap;
+}
+.evi-list a:hover { text-decoration: underline; }
+
+/* ============================================================
+   FURTHER WORK
+   ============================================================ */
+.further { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0; border-top: 1px solid var(--rule); }
+.fw {
+  padding: 1.5rem 1.5rem 1.5rem 0;
+  border-right: 1px solid var(--rule);
+}
+.fw:last-child { border-right: 0; }
+.fw h4 { font-size: 1.0625rem; margin-bottom: .5rem; }
+.fw p { font-size: .9125rem; color: var(--ink-2); }
+.fw .fw-k {
+  font-family: var(--mono); font-size: .6875rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--ink-3); display: block; margin-bottom: .6rem;
+}
+.fw a.lnk { font-size: .8125rem; display: inline-block; margin-top: .7rem; font-family: var(--mono); }
+@media (max-width: 820px) {
+  .fw { border-right: 0; border-bottom: 1px solid var(--rule); padding-right: 0; }
+  .fw:last-child { border-bottom: 0; }
+}
+
+/* ============================================================
+   CAPABILITIES
+   ============================================================ */
+.caps { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 0; }
+.cap {
+  padding: 1.5rem 1.75rem 1.5rem 0;
+  border-top: 1px solid var(--rule);
+}
+.cap h4 {
+  font-size: .8125rem; font-family: var(--mono); font-weight: 400;
+  letter-spacing: .12em; text-transform: uppercase; color: var(--accent);
+  margin-bottom: .9rem;
+}
+.cap ul { list-style: none; margin: 0; padding: 0; display: grid; gap: .45rem; }
+.cap li { font-size: .9375rem; color: var(--ink-2); }
+.cap li b { color: var(--ink); font-weight: 600; }
+
+/* ============================================================
+   PHILOSOPHY
+   ============================================================ */
+.philo { display: grid; gap: 0; }
+.pr {
+  display: grid; grid-template-columns: minmax(0, 20ch) minmax(0, 1fr);
+  gap: clamp(1rem, 3vw, 2.5rem);
+  padding-block: 1.6rem;
+  border-top: 1px solid var(--rule);
+  align-items: baseline;
+}
+.pr:last-child { border-bottom: 1px solid var(--rule); }
+.pr h3 {
+  font-size: 1.0625rem; letter-spacing: -0.01em;
+  color: var(--ink);
+}
+.pr p { color: var(--ink-2); font-size: .9875rem; max-width: var(--measure); }
+@media (max-width: 780px) { .pr { grid-template-columns: minmax(0, 1fr); gap: .5rem; } }
+
+/* ============================================================
+   CREDENTIALS
+   ============================================================ */
+.creds { display: grid; gap: 0; }
+.cred {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  gap: 1.5rem; align-items: center;
+  padding-block: 1.25rem;
+  border-top: 1px solid var(--rule);
+}
+.cred:last-of-type { border-bottom: 1px solid var(--rule); }
+.cred h4 { font-size: 1.0625rem; }
+.cred p { font-size: .9125rem; color: var(--ink-2); margin-top: .3rem; max-width: 58ch; }
+.pill {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  padding: .3rem .6rem; border: 1px solid currentColor;
+  white-space: nowrap;
+}
+.pill.held { color: var(--ok); }
+.pill.prep { color: var(--accent); }
+
+/* ============================================================
+   PROOF TABLE
+   ============================================================ */
+.tablewrap { overflow-x: auto; border: 1px solid var(--rule); background: var(--surface); }
+table.proof { width: 100%; border-collapse: collapse; font-size: .875rem; min-width: 640px; }
+table.proof th, table.proof td {
+  text-align: left; padding: .8rem 1rem;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+}
+table.proof th {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--ink-3); font-weight: 400;
+  background: var(--surface-2);
+  position: sticky; top: 0;
+}
+table.proof tr:last-child td { border-bottom: 0; }
+table.proof td:first-child { color: var(--ink); }
+table.proof code { font-size: .76rem; color: var(--ink-2); word-break: break-all; }
+table.proof a { color: var(--accent); text-decoration: none; font-family: var(--mono); font-size: .7rem; letter-spacing: .05em; }
+table.proof a:hover { text-decoration: underline; }
+
+/* ============================================================
+   PROCESS
+   ============================================================ */
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 0; }
+.step {
+  padding: 0 1.5rem 1.5rem 0;
+  border-top: 2px solid var(--accent-line);
+  padding-top: 1.1rem;
+  margin-right: 1px;
+}
+.step .s-n {
+  font-family: var(--mono); font-size: .6875rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--accent); display: block; margin-bottom: .7rem;
+}
+.step h4 { font-size: 1.0625rem; margin-bottom: .5rem; }
+.step p { font-size: .9125rem; color: var(--ink-2); }
+
+/* ============================================================
+   CONTACT
+   ============================================================ */
+.contact-in {
+  border: 1px solid var(--rule-strong);
+  background: var(--surface);
+  padding: clamp(1.75rem, 5vw, 3.25rem);
+  box-shadow: var(--shadow);
+}
+.contact-in h2 { font-size: clamp(1.8rem, 3.6vw, 2.6rem); max-width: 20ch; }
+.contact-in .lede { margin-top: 1.1rem; color: var(--ink-2); max-width: 58ch; }
+.contact-rows { margin-top: 2rem; display: grid; gap: 0; }
+.crow {
+  display: grid; grid-template-columns: 150px minmax(0,1fr);
+  gap: 1rem; padding-block: .85rem;
+  border-top: 1px solid var(--rule);
+  font-size: .9375rem;
+}
+.crow:last-child { border-bottom: 1px solid var(--rule); }
+.crow dt {
+  font-family: var(--mono); font-size: .6875rem;
+  letter-spacing: .11em; text-transform: uppercase; color: var(--ink-3);
+  padding-top: .18rem;
+}
+.crow dd { margin: 0; color: var(--ink-2); }
+@media (max-width: 640px) { .crow { grid-template-columns: minmax(0, 1fr); gap: .2rem; } }
+
+footer.site {
+  border-top: 1px solid var(--rule);
+  padding-block: 2rem 3rem;
+  font-family: var(--mono); font-size: .75rem;
+  color: var(--ink-3);
+  display: flex; justify-content: space-between; gap: 1rem; flex-wrap: wrap;
+  letter-spacing: .04em;
+}
+footer.site a { color: var(--ink-3); text-decoration: none; }
+footer.site a:hover { color: var(--accent); }
+
+/* ============================================================
+   MOTION
+   ============================================================ */
+@media (prefers-reduced-motion: no-preference) {
+  .reveal { opacity: 0; transform: translateY(12px); transition: opacity .6s ease, transform .6s ease; }
+  .reveal.in { opacity: 1; transform: none; }
+}
+</style>
+
+<a class="skip" href="#main">Skip to content</a>
+
+<header class="topbar">
+  <div class="topbar-in">
+    <a class="brand" href="#top">
+      <b>Imad El Bouhati</b>
+      <span>DevOps &middot; SRE</span>
+    </a>
+    <nav class="navlinks" aria-label="Sections">
+      <a href="#services">Services</a>
+      <a href="#work">Case studies</a>
+      <a href="#capabilities">Capabilities</a>
+      <a href="#proof">Proof</a>
+      <a href="#process">How I work</a>
+    </nav>
+    <a class="btn" href="mailto:elbouhatiimad@gmail.com?subject=DevOps%20project%20enquiry">Start a project</a>
+  </div>
+</header>
+
+<main id="main">
+
+  <!-- ========================= HERO ========================= -->
+  <section id="top" class="wrap hero">
+    <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Available for freelance &amp; contract engagements</p>
+    <h1>Infrastructure that holds up when nobody is watching it.</h1>
+    <p class="lede">
+      I'm Imad El Bouhati, a DevOps and SRE engineer. I design and automate <strong>Kubernetes</strong>,
+      <strong>AWS</strong> and <strong>Linux</strong> infrastructure — and I write the controllers, pipelines
+      and firewall rules myself, in Go, Terraform and Ansible. Every claim on this page links to
+      source code you can read before you hire me.
+    </p>
+    <div class="hero-cta">
+      <a class="btn" href="mailto:elbouhatiimad@gmail.com?subject=DevOps%20project%20enquiry">Start a project</a>
+      <a class="btn btn-ghost" href="#work">Read the case studies</a>
+    </div>
+
+    <div class="evidence">
+      <a href="https://github.com/imad-elbouhati/kubeguard-operator">
+        <span class="k">Kubernetes &middot; Go</span>
+        <span class="v"><b>A working operator</b>CRD, reconcile loop, drift correction &amp; e2e tests</span>
+      </a>
+      <a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm">
+        <span class="k">AWS &middot; Terraform</span>
+        <span class="v"><b>EKS from scratch</b>VPC, private nodes, OIDC/IRSA, EBS CSI, Helm</span>
+      </a>
+      <a href="https://github.com/imad-elbouhati/infra-lab">
+        <span class="k">Linux &middot; Networking</span>
+        <span class="v"><b>A host, fully automated</b>nftables, WireGuard, TLS, Prometheus, Grafana</span>
+      </a>
+      <a href="https://github.com/imad-elbouhati?tab=repositories">
+        <span class="k">CI/CD</span>
+        <span class="v"><b>GitLab CI &amp; GitHub Actions</b>Immutable tags, staged promotion, manual gates</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- ========================= SERVICES ========================= -->
+  <section id="services" class="wrap sect">
+    <div class="sect-grid">
+      <div class="rail"><span class="idx">01</span>Services<span class="rail-note">What I take on, and what you get back.</span></div>
+      <div>
+        <div class="sect-head">
+          <h2>Four things I'm hired to do</h2>
+          <p>Most engagements start with one of these and expand once the first piece is stable. I work
+             directly with your engineers — no layers, no hand-off documents nobody reads.</p>
+        </div>
+
+        <div class="services">
+          <article class="svc">
+            <div class="svc-n">01</div>
+            <div><h3>Kubernetes platform engineering</h3></div>
+            <div class="svc-body">
+              Cluster setup and hardening, Helm packaging, RBAC and resource policy, and custom controllers
+              in Go when off-the-shelf tooling doesn't fit your constraints. I've built a policy-enforcing
+              operator end to end, so I know where the sharp edges are.
+              <div class="svc-tags">
+                <span class="tag">Kubernetes</span><span class="tag">Helm</span><span class="tag">Kubebuilder</span>
+                <span class="tag">controller-runtime</span><span class="tag">RBAC</span><span class="tag">Kustomize</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="svc">
+            <div class="svc-n">02</div>
+            <div><h3>Cloud infrastructure as code</h3></div>
+            <div class="svc-body">
+              AWS described entirely in Terraform: VPC and subnet layout, EKS clusters, IAM roles and
+              trust policies, IRSA for per-workload permissions, storage drivers and pinned add-on versions.
+              Infrastructure you can destroy and rebuild, not infrastructure you're afraid to touch.
+              <div class="svc-tags">
+                <span class="tag">Terraform</span><span class="tag">AWS</span><span class="tag">EKS</span>
+                <span class="tag">VPC</span><span class="tag">IAM / OIDC</span><span class="tag">EBS CSI</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="svc">
+            <div class="svc-n">03</div>
+            <div><h3>CI/CD &amp; release engineering</h3></div>
+            <div class="svc-body">
+              Pipelines that build an artifact once, tag it immutably, and promote that exact artifact
+              through environments — with a human gate in front of production. GitLab CI and GitHub
+              Actions, plus GitOps delivery with Flux where continuous reconciliation suits you better.
+              <div class="svc-tags">
+                <span class="tag">GitLab CI</span><span class="tag">GitHub Actions</span><span class="tag">Docker</span>
+                <span class="tag">Flux CD</span><span class="tag">GitOps</span><span class="tag">golangci-lint</span>
+              </div>
+            </div>
+          </article>
+
+          <article class="svc">
+            <div class="svc-n">04</div>
+            <div><h3>Linux, networking &amp; reliability</h3></div>
+            <div class="svc-body">
+              Firewalling with nftables, VPN access with WireGuard, automated TLS renewal, reverse proxies,
+              and Prometheus/Grafana monitoring — all provisioned with Ansible. Also the unglamorous part:
+              working out why the thing that "succeeded" didn't actually work.
+              <div class="svc-tags">
+                <span class="tag">Ansible</span><span class="tag">nftables</span><span class="tag">WireGuard</span>
+                <span class="tag">Nginx</span><span class="tag">Certbot</span><span class="tag">Prometheus</span><span class="tag">Grafana</span>
+              </div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= CASE STUDIES ========================= -->
+  <section id="work" class="wrap sect">
+    <div class="sect-grid">
+      <div class="rail"><span class="idx">02</span>Selected work<span class="rail-note">Three projects, documented the way I'd document yours.</span></div>
+      <div>
+        <div class="sect-head">
+          <h2>Case studies</h2>
+          <p>These are personal engineering projects, not client deployments — so you'll find no traffic
+             numbers or uptime percentages here, because I don't have any that would be honest. What you
+             will find is the reasoning, the trade-offs, and a link to every line of code behind it.</p>
+        </div>
+
+        <!-- ---------- CASE 1 ---------- -->
+        <article class="case reveal">
+          <div class="case-head">
+            <div class="case-meta">
+              <span class="cid">Case 01</span><span class="sep">/</span>
+              <span>Go &middot; Kubernetes operator</span><span class="sep">/</span>
+              <span>kubeguard-operator</span>
+            </div>
+            <h3>A controller that keeps every Deployment inside policy</h3>
+            <p class="case-sub">
+              KubeGuard is a Kubernetes operator that continuously enforces replica, CPU, memory and
+              label guardrails across a cluster — and corrects the resources that drift out of them.
+            </p>
+            <div class="case-links">
+              <a href="https://github.com/imad-elbouhati/kubeguard-operator">View repository &rarr;</a>
+              <a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/internal/controller/guardpolicy_controller.go">Read the reconciler &rarr;</a>
+            </div>
+          </div>
+
+          <dl class="fields">
+            <div class="field">
+              <dt>Problem</dt>
+              <dd>
+                <p>Once more than a handful of teams are pushing manifests, keeping every Deployment
+                   within sane bounds stops being a review problem and becomes an enforcement problem.
+                   Replica counts creep, resource limits get omitted or inflated, and ownership labels
+                   go missing — so cost attribution and capacity planning quietly degrade.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Context</dt>
+              <dd>
+                <p>Built as a standalone operator with Kubebuilder v4 and controller-runtime, targeting
+                   any Kubernetes cluster from v1.11.3 upward. The whole guardrail is expressed as one
+                   cluster-scoped custom resource, <code>GuardPolicy</code>, so platform teams declare
+                   policy once instead of reviewing it per manifest.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Architecture</dt>
+              <dd>
+                <ul class="ticks">
+                  <li><b>Custom resource.</b> <code>GuardPolicy</code> carries a <code>namespaceSelector</code>,
+                      <code>maxReplicas</code>, <code>maxCPU</code>, <code>maxMemory</code> and an
+                      <code>enforceLabels</code> map. No selector means the policy applies cluster-wide.</li>
+                  <li><b>Dual-trigger reconciliation.</b> The controller watches <code>GuardPolicy</code>
+                      objects <em>and</em> <code>Deployments</code>. A map function resolves any Deployment
+                      event back to the set of policies whose namespace selector matches, so a violating
+                      change is corrected on write rather than on the next sweep.</li>
+                  <li><b>Continuous sweep.</b> Every reconcile returns
+                      <code>RequeueAfter: 5 * time.Minute</code>, so drift introduced while the controller
+                      was down still gets caught.</li>
+                  <li><b>Detect, then correct.</b> <code>detectDrift()</code> produces a
+                      <code>DriftReport</code> — per-container CPU and memory targets, missing labels, a
+                      replica target — which <code>correctDeployment()</code> applies as a patch.
+                      Detection is pure and independently testable; mutation is isolated.</li>
+                  <li><b>Reporting.</b> Corrections are written to <code>status.violations</code>, summarised
+                      in a <code>Reconciled</code> status condition, and emitted as Kubernetes Events.</li>
+                </ul>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Technologies</dt>
+              <dd>
+                <div class="stack">
+                  <span class="tag">Go 1.23</span><span class="tag">Kubebuilder v4</span>
+                  <span class="tag">controller-runtime</span><span class="tag">CRD / apiextensions</span>
+                  <span class="tag">Kustomize</span><span class="tag">Ginkgo + Gomega</span>
+                  <span class="tag">envtest</span><span class="tag">GitHub Actions</span>
+                  <span class="tag">golangci-lint</span><span class="tag">distroless</span>
+                  <span class="tag">Prometheus ServiceMonitor</span>
+                </div>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Engineering decisions</dt>
+              <dd>
+                <ul class="ticks">
+                  <li><b>Typed quantities over strings.</b> <code>maxCPU</code> and <code>maxMemory</code>
+                      are <code>resource.Quantity</code>, so the API server rejects malformed units at
+                      admission and comparisons use <code>Cmp()</code> rather than string parsing.</li>
+                  <li><b>Merge patch, not update.</b> Corrections go through
+                      <code>client.MergeFrom(deployment)</code> against a <code>DeepCopy</code>. Using
+                      <code>Update()</code> would send the whole object and lose concurrent writes from
+                      other controllers on a stale <code>resourceVersion</code>.</li>
+                  <li><b>Auditability by default.</b> Every corrected Deployment is stamped with
+                      <code>platform.demo/last-corrected</code> and <code>platform.demo/corrected-by</code>,
+                      so the next engineer to open the manifest can see what changed it and when — the
+                      question every mutating controller must be able to answer.</li>
+                  <li><b>Operator ergonomics.</b> The CRD declares the short name <code>gp</code> and printer
+                      columns, so <code>kubectl get gp</code> shows limits and age without a JSONPath incantation.</li>
+                  <li><b>Least privilege at runtime.</b> The manager ships on
+                      <code>distroless/static:nonroot</code> as UID 65532, with
+                      <code>allowPrivilegeEscalation: false</code>, all capabilities dropped and a
+                      <code>RuntimeDefault</code> seccomp profile — it satisfies the restricted Pod
+                      Security Standard.</li>
+                </ul>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Hardest part</dt>
+              <dd>
+                <p>Mapping a Deployment event back to the policies that govern it. A Deployment doesn't
+                   know which <code>GuardPolicy</code> applies to it — the relationship lives in a label
+                   selector on its <em>namespace</em>. <code>deploymentToGuardPolicies()</code> lists every
+                   policy, evaluates each one's namespace selector against the Deployment's namespace, and
+                   enqueues only the matching policies. Without that indirection the controller would
+                   either re-scan the entire cluster on every Deployment write, or miss policies entirely.</p>
+                <p>The second is a design question rather than a coding one: enforcement is
+                   reconcile-based, not admission-based. That choice is deliberate and it has a cost —
+                   see the trade-off below.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Implementation</dt>
+              <dd>
+                <pre class="code"><span class="cm">// correctDeployment — patch, never overwrite</span>
+corrected := deployment.DeepCopy()
+
+<span class="cm">// ... clamp replicas, limits, inject labels ...</span>
+
+corrected.Annotations[<b>"platform.demo/last-corrected"</b>] =
+    time.Now().Format(time.RFC3339)
+corrected.Annotations[<b>"platform.demo/corrected-by"</b>] = policy.Name
+
+if err := r.<b>Patch</b>(ctx, corrected, client.<b>MergeFrom</b>(deployment)); err != nil {
+    return fmt.Errorf("failed to patch deployment: %w", err)
+}</pre>
+                <span class="filepath">internal/controller/guardpolicy_controller.go</span>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Result</dt>
+              <dd>
+                <p>Applying a <code>GuardPolicy</code> clamps over-provisioned Deployments back to the
+                   declared ceilings, injects any required ownership labels, and records what it changed.
+                   Operators see the outcome through <code>kubectl get gp</code> and
+                   <code>kubectl describe</code> rather than by reading controller logs.</p>
+                <p>The repository ships three GitHub Actions workflows — lint, unit tests and an end-to-end
+                   suite. The e2e suite deploys the controller into a real cluster under the
+                   <em>restricted</em> Pod Security Standard, verifies the manager pod runs, then
+                   authenticates against the metrics endpoint with a service-account token and asserts
+                   that controller-runtime metrics are actually being served.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Trade-off</dt>
+              <dd>
+                <div class="tradeoff">
+                  <span class="t-label">Known limitation — stated deliberately</span>
+                  Because enforcement runs in a reconcile loop rather than a validating admission webhook,
+                  a non-compliant Deployment is <em>admitted first and corrected shortly after</em>, not
+                  rejected outright. For guardrails that must never be breached even briefly, the next
+                  step is a validating webhook backed by the same <code>detectDrift()</code> logic. Unit
+                  test coverage is also currently thin relative to the e2e suite — the reconciler's
+                  happy path is covered under envtest, the individual drift-detection branches are not yet.
+                </div>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Evidence</dt>
+              <dd>
+                <ul class="evi-list">
+                  <li><code>internal/controller/guardpolicy_controller.go</code> — reconcile, drift detection, patching
+                    <a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/internal/controller/guardpolicy_controller.go">Open</a></li>
+                  <li><code>api/v1/guardpolicy_types.go</code> — CRD schema, validation markers, printer columns
+                    <a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/api/v1/guardpolicy_types.go">Open</a></li>
+                  <li><code>test/e2e/e2e_test.go</code> — 329-line end-to-end suite incl. metrics authn
+                    <a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/test/e2e/e2e_test.go">Open</a></li>
+                  <li><code>Dockerfile</code> — distroless, non-root, <code>CGO_ENABLED=0</code>, multi-arch args
+                    <a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/Dockerfile">Open</a></li>
+                  <li><code>.github/workflows/</code> — lint, test and e2e pipelines
+                    <a href="https://github.com/imad-elbouhati/kubeguard-operator/tree/main/.github/workflows">Open</a></li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </article>
+
+        <!-- ---------- CASE 2 ---------- -->
+        <article class="case reveal">
+          <div class="case-head">
+            <div class="case-meta">
+              <span class="cid">Case 02</span><span class="sep">/</span>
+              <span>Linux &middot; networking &middot; automation</span><span class="sep">/</span>
+              <span>infra-lab</span>
+            </div>
+            <h3>One command rebuilds the entire host — firewall, VPN, TLS and monitoring</h3>
+            <p class="case-sub">
+              An internet-facing VPS provisioned entirely by Ansible: eight roles covering SSH hardening,
+              an nftables edge firewall, WireGuard, a TLS-terminating reverse proxy, a CI runner and a
+              Prometheus/Grafana stack.
+            </p>
+            <div class="case-links">
+              <a href="https://github.com/imad-elbouhati/infra-lab">View repository &rarr;</a>
+              <a href="https://github.com/imad-elbouhati/infra-lab/blob/master/nftables/files/input.j2">Read the firewall ruleset &rarr;</a>
+            </div>
+          </div>
+
+          <dl class="fields">
+            <div class="field">
+              <dt>Problem</dt>
+              <dd>
+                <p>A single public-facing host running several services is the point where hand-configuration
+                   stops being viable. Rules drift, nobody remembers which package was installed by hand,
+                   and rebuilding the box after an incident means rediscovering the setup from scratch.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Context</dt>
+              <dd>
+                <p>A Debian-family VPS serving <code>infra-lab.space</code> and its subdomains. Everything
+                   is expressed as Ansible roles, one per concern, applied in a fixed order by a single
+                   playbook. Secrets are held in Ansible Vault; the Cloudflare API credentials land on
+                   disk at mode <code>0600</code> inside a <code>0700</code> directory.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Architecture</dt>
+              <dd>
+                <pre class="code"><span class="cm"># setup.yaml — order is the architecture</span>
+- hosts: main
+  roles:
+    - bootstrap            <span class="cm"># sshd hardening, fail2ban, ip_forward, hostname</span>
+    - nftables             <span class="cm"># edge firewall, default-drop forward chain</span>
+    - wireguard            <span class="cm"># admin-plane VPN on udp/51820</span>
+    - postgres
+    - nginx-reverse-proxy  <span class="cm"># TLS termination + subdomain routing</span>
+    - certbot              <span class="cm"># ACME DNS-01 + systemd renewal timer</span>
+    - gitlab-runner        <span class="cm"># self-hosted CI executor (docker)</span>
+    - monitoring           <span class="cm"># Prometheus + Grafana</span></pre>
+                <span class="filepath">setup.yaml</span>
+                <p>Nginx terminates TLS for the apex domain and reverse-proxies Grafana and Prometheus on
+                   their own subdomains, forwarding <code>X-Real-IP</code>,
+                   <code>X-Forwarded-For</code> and <code>X-Forwarded-Proto</code>. Port 80 exists only to
+                   issue a 301 to HTTPS. TLS is restricted to v1.2 and v1.3 with a shared session cache.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Technologies</dt>
+              <dd>
+                <div class="stack">
+                  <span class="tag">Ansible</span><span class="tag">Ansible Vault</span><span class="tag">nftables</span>
+                  <span class="tag">WireGuard</span><span class="tag">Docker Compose</span><span class="tag">Nginx</span>
+                  <span class="tag">Certbot / ACME DNS-01</span><span class="tag">Cloudflare DNS</span>
+                  <span class="tag">systemd timers</span><span class="tag">Prometheus</span><span class="tag">Grafana</span>
+                  <span class="tag">PostgreSQL</span><span class="tag">fail2ban</span><span class="tag">GitLab Runner</span>
+                </div>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Engineering decisions</dt>
+              <dd>
+                <ul class="ticks">
+                  <li><b>nftables rather than iptables or ufw.</b> One atomic ruleset loaded with
+                      <code>nft -f</code>, connection tracking expressed as a
+                      <code>ct state vmap</code>, and <b>named counters</b> on the SSH and WireGuard rules
+                      so "is anything actually hitting this rule?" is answerable without tcpdump.</li>
+                  <li><b>Default-drop forwarding.</b> The forward chain is
+                      <code>policy drop</code> with explicit accepts — the opposite of the permissive
+                      default most hosts ship with.</li>
+                  <li><b>DNS-01 instead of HTTP-01.</b> Certificates are issued through Cloudflare DNS,
+                      which allows wildcard certificates for the subdomains and removes the ACME
+                      dependency on inbound port 80 reaching a specific web root.</li>
+                  <li><b>A systemd timer, not a cron entry.</b> Renewal runs
+                      <code>OnCalendar=monthly</code> with <code>Persistent=true</code>, so a renewal
+                      missed while the host was off runs at next boot instead of being skipped, and
+                      <code>RandomizedDelaySec=1h</code> avoids hammering the ACME endpoint on the hour.</li>
+                  <li><b>Hardening in the first role.</b> SSH config is templated (key-based auth, no root
+                      password login), fail2ban is installed with a templated jail before anything else
+                      is exposed.</li>
+                </ul>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Difficult problems solved</dt>
+              <dd>
+                <p><strong>1 — Containers went dark the moment the firewall landed.</strong>
+                   After the nftables role was applied, Docker containers started but couldn't reach
+                   anything. The input chain was fine and the host itself had connectivity, which localised
+                   the fault to forwarding rather than ingress: the forward chain's <code>policy drop</code>
+                   was discarding the bridge-to-host traffic Docker relies on, and only the WireGuard
+                   interface had been whitelisted. The fix was a single explicit rule for Docker's own
+                   interfaces — keeping the default-drop posture instead of relaxing the chain policy.</p>
+                <pre class="code">chain forward {
+    type filter hook forward priority filter; policy drop;
+    ct state vmap { invalid : drop, established : accept, related : accept }
+    iifname "wg0" accept
+<span class="add">+   iifname { "docker0", "veth*", "br-*" } accept</span>
+}</pre>
+                <span class="filepath">nftables/files/input.j2 &middot; commit 54f3267</span>
+
+                <p><strong>2 — Renewals succeeded; the served certificate never changed.</strong>
+                   The renewal unit exited 0 every month, yet Nginx kept presenting the old certificate.
+                   Two faults were stacked in the same template line: the reload command expanded to
+                   <code>docker compose restart</code> where the variable already contained
+                   <code>docker</code>, and it targeted a service named <code>nginx</code> while the
+                   Compose service was actually <code>nginx-proxy</code>. Certbot genuinely renewed the
+                   certificate — nothing ever reloaded the process holding it. This is the failure mode I
+                   look for hardest in other people's systems: <em>the job reports success and the outcome
+                   never happens</em>. The verification that matters is checking the served certificate,
+                   not the exit code.</p>
+                <span class="filepath">certbot/templates/renew.sh.j2 &middot; commit ab475dc</span>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Result</dt>
+              <dd>
+                <p>A single <code>ansible-playbook -i inventory/hosts setup.yaml</code> reproduces the
+                   complete host: hardened SSH, firewall, VPN, database, TLS-terminating proxy, self-hosted
+                   CI runner and a monitoring stack — with certificates renewing on a timer that has been
+                   verified to actually reload the proxy.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Evidence</dt>
+              <dd>
+                <ul class="evi-list">
+                  <li><code>nftables/files/input.j2</code> — full ruleset, counters, default-drop forward chain
+                    <a href="https://github.com/imad-elbouhati/infra-lab/blob/master/nftables/files/input.j2">Open</a></li>
+                  <li><code>certbot/</code> — DNS-01 issuance, renew script, systemd service + timer
+                    <a href="https://github.com/imad-elbouhati/infra-lab/tree/master/certbot">Open</a></li>
+                  <li><code>nginx-reverse-proxy/files/reverse-proxy.conf</code> — TLS + subdomain proxying
+                    <a href="https://github.com/imad-elbouhati/infra-lab/blob/master/nginx-reverse-proxy/files/reverse-proxy.conf">Open</a></li>
+                  <li><code>bootstrap/tasks/main.yaml</code> — sshd template, fail2ban, sysctl
+                    <a href="https://github.com/imad-elbouhati/infra-lab/blob/master/bootstrap/tasks/main.yaml">Open</a></li>
+                  <li><code>monitoring/tasks/main.yaml</code> — Prometheus + Grafana install and enablement
+                    <a href="https://github.com/imad-elbouhati/infra-lab/blob/master/monitoring/tasks/main.yaml">Open</a></li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </article>
+
+        <!-- ---------- CASE 3 ---------- -->
+        <article class="case reveal">
+          <div class="case-head">
+            <div class="case-meta">
+              <span class="cid">Case 03</span><span class="sep">/</span>
+              <span>AWS &middot; Terraform &middot; Helm &middot; CI/CD</span><span class="sep">/</span>
+              <span>microservices-deployment-eks-helm</span>
+            </div>
+            <h3>A three-service platform on EKS, with a promotion path you can defend</h3>
+            <p class="case-sub">
+              Terraform-provisioned EKS running a UI, an auth service and a weather API — packaged as Helm
+              charts and delivered by a GitLab pipeline that promotes the exact image it tested.
+            </p>
+            <div class="case-links">
+              <a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm">View repository &rarr;</a>
+              <a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/tree/main/terraform">Read the Terraform &rarr;</a>
+            </div>
+          </div>
+
+          <dl class="fields">
+            <div class="field">
+              <dt>Problem</dt>
+              <dd>
+                <p>Getting a multi-service application onto managed Kubernetes is the easy half. The hard
+                   half is making the infrastructure reproducible, giving stateful workloads real storage
+                   with correctly scoped cloud permissions, and building a release path where what reaches
+                   production is provably the artifact that passed staging.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Context</dt>
+              <dd>
+                <p>Three containerised services — a Node.js UI, a Go auth service backed by MySQL, and a
+                   weather API — deployed to an EKS cluster in <code>eu-west-3</code>, with a staging
+                   namespace and a production release gated behind manual approval.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Architecture</dt>
+              <dd>
+                <ul class="ticks">
+                  <li><b>Network.</b> A two-AZ VPC (<code>10.0.0.0/16</code>) with paired public and private
+                      <code>/19</code> subnets. Subnets are tagged
+                      <code>kubernetes.io/role/elb</code> and <code>internal-elb</code> so AWS load
+                      balancer provisioning can discover them automatically.</li>
+                  <li><b>Compute.</b> The EKS node group is placed in the <em>private</em> subnets only,
+                      egressing through NAT — nodes are never directly addressable from the internet.</li>
+                  <li><b>Identity.</b> An IAM OIDC provider is created from the cluster's issuer, and the
+                      EBS CSI driver assumes a role via web identity restricted to exactly one subject:
+                      <code>system:serviceaccount:kube-system:ebs-csi-controller-sa</code>.</li>
+                  <li><b>Storage.</b> The EBS CSI driver is installed as a pinned EKS add-on
+                      (<code>v1.21.0-eksbuild.1</code>) wired to that role, giving MySQL real persistent volumes.</li>
+                  <li><b>Packaging.</b> One Helm chart per service, each with a Deployment, Service,
+                      Ingress, ServiceAccount, HPA and a <code>helm test</code> connection hook. The auth
+                      chart declares MySQL as a chart dependency.</li>
+                </ul>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Technologies</dt>
+              <dd>
+                <div class="stack">
+                  <span class="tag">Terraform</span><span class="tag">AWS EKS</span><span class="tag">VPC</span>
+                  <span class="tag">IAM / OIDC / IRSA</span><span class="tag">EBS CSI</span><span class="tag">Helm</span>
+                  <span class="tag">GitLab CI</span><span class="tag">Docker</span><span class="tag">Kubernetes RBAC</span>
+                  <span class="tag">HPA</span><span class="tag">Alertmanager</span><span class="tag">Velero</span>
+                </div>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Engineering decisions</dt>
+              <dd>
+                <ul class="ticks">
+                  <li><b>IRSA over node instance profiles.</b> Attaching
+                      <code>AmazonEBSCSIDriverPolicy</code> to the node role would grant every pod on
+                      every node the ability to manipulate EBS volumes. Federating through the cluster's
+                      OIDC provider and conditioning the trust policy on a single service-account subject
+                      scopes it to the one controller that needs it.</li>
+                  <li><b>Immutable image tags.</b> Staging deploys
+                      <code>$CI_COMMIT_SHA</code>. Nothing deploys <code>latest</code>.</li>
+                  <li><b>Promotion by re-tagging, never rebuilding.</b> The promote stage resolves the git
+                      tag back to its commit with
+                      <code>git rev-list -n 1 $CI_COMMIT_TAG</code>, pulls the image built from
+                      <em>that</em> SHA, and re-tags it as the release. The bytes that reach production are
+                      the bytes that ran in staging — a rebuild would silently pick up new base-image
+                      layers and dependency versions.</li>
+                  <li><b>A human gate on production.</b> The deploy stage is
+                      <code>when: manual</code> and fires only on tags.</li>
+                  <li><b>A named cost trade-off.</b> <code>single_nat_gateway = true</code> collapses NAT to
+                      one AZ. That is the right call for a lab and the wrong call for production, where the
+                      NAT gateway becomes a single-AZ dependency for all egress.</li>
+                </ul>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Hardest part</dt>
+              <dd>
+                <p>Getting stateful workloads working on EKS is a three-layer problem, and each layer fails
+                   in a way that looks like the others: the CSI driver add-on must exist, its service
+                   account must be annotated with a role, and that role's trust policy must name the exact
+                   OIDC subject. If the trust condition is wrong the pod comes up healthy and volume
+                   provisioning simply hangs — the PVC sits in <code>Pending</code> with no obvious cause
+                   until you read the CSI controller logs.</p>
+                <p>The second was designing promotion without rebuilds. Re-running a build on a tag is the
+                   obvious approach and it quietly breaks the guarantee that staging validated production's
+                   artifact; resolving tag &rarr; commit &rarr; existing image keeps that guarantee intact.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Implementation</dt>
+              <dd>
+                <pre class="code"><span class="cm"># Trust policy scoped to exactly one service account</span>
+condition {
+  test     = "StringEquals"
+  variable = "${replace(aws_iam_openid_connect_provider.eks.url, "https://", "")}:sub"
+  values   = [<b>"system:serviceaccount:kube-system:ebs-csi-controller-sa"</b>]
+}</pre>
+                <span class="filepath">terraform/csi-driver-iam.tf</span>
+                <pre class="code"><span class="cm"># Promote the tested artifact — resolve tag to the commit that built it</span>
+TAGGED_HASH=`git rev-list -n 1 $CI_COMMIT_TAG`
+docker pull $CI_REGISTRY_USER/weatherapp-ui:<b>$TAGGED_HASH</b>
+docker tag  $CI_REGISTRY_USER/weatherapp-ui:$TAGGED_HASH \
+            $CI_REGISTRY_USER/weatherapp-ui:$CI_COMMIT_TAG</pre>
+                <span class="filepath">.gitlab-ci.yml</span>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Result</dt>
+              <dd>
+                <p>Infrastructure stands up from <code>terraform apply</code>. Merging to main builds,
+                   pushes and deploys SHA-tagged images to staging. Tagging a commit promotes those exact
+                   images and offers a manual production deploy. Backup and restore is covered by EBS
+                   volume snapshots and Velero.</p>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Trade-off</dt>
+              <dd>
+                <div class="tradeoff">
+                  <span class="t-label">Known limitation — stated deliberately</span>
+                  The CI identity in this repository is bound to a Role granting <code>'*'</code> verbs on
+                  <code>'*'</code> resources. That is a lab shortcut, not a pattern I would ship: a
+                  deployment identity should hold only the verbs Helm actually needs on the resource types
+                  it actually manages, in the namespaces it owns. The pipeline also injects a base64
+                  kubeconfig as a CI variable; on a production account I would replace that with
+                  short-lived credentials obtained through OIDC federation, so no long-lived cluster
+                  credential sits in CI at all.
+                </div>
+              </dd>
+            </div>
+
+            <div class="field">
+              <dt>Evidence</dt>
+              <dd>
+                <ul class="evi-list">
+                  <li><code>terraform/eks.tf</code> — VPC, private-subnet node group, cluster IAM roles
+                    <a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/blob/main/terraform/eks.tf">Open</a></li>
+                  <li><code>terraform/csi-driver-iam.tf</code> — IRSA trust policy scoped to one subject
+                    <a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/blob/main/terraform/csi-driver-iam.tf">Open</a></li>
+                  <li><code>.gitlab-ci.yml</code> — build &rarr; push &rarr; deliver &rarr; promote &rarr; manual deploy
+                    <a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/blob/main/.gitlab-ci.yml">Open</a></li>
+                  <li><code>helm/</code> — three charts: Deployment, Service, Ingress, HPA, tests
+                    <a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/tree/main/helm">Open</a></li>
+                  <li><code>k8s/alerts/alertmanager.yaml</code> — Slack routing, grouping and repeat intervals
+                    <a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/blob/main/k8s/alerts/alertmanager.yaml">Open</a></li>
+                </ul>
+              </dd>
+            </div>
+          </dl>
+        </article>
+
+        <!-- ---------- FURTHER WORK ---------- -->
+        <h3 style="font-size:1.0625rem;font-family:var(--mono);font-weight:400;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-3);margin-top:3.5rem;">Also in the open</h3>
+        <div class="further">
+          <div class="fw">
+            <span class="fw-k">OpenShift &middot; troubleshooting</span>
+            <h4>EX280 lab framework</h4>
+            <p>Nine objective domains of hands-on OpenShift labs, each with a task brief, hints, a worked
+               solution and a <code>grade.sh</code> that asserts against the <em>live cluster</em>. One lab
+               deliberately deploys three broken workloads — <code>ImagePullBackOff</code>,
+               <code>OOMKilled</code> and an unschedulable Pending pod — and requires a written root cause
+               for each before it passes.</p>
+            <a class="lnk" href="https://github.com/imad-elbouhati/ex280-prep">ex280-prep &rarr;</a>
+          </div>
+          <div class="fw">
+            <span class="fw-k">GitOps &middot; multi-tenancy</span>
+            <h4>Flux multi-tenant clusters</h4>
+            <p>Staging and production clusters reconciled by Flux from Git, with infrastructure
+               controllers and tenants separated into independent Kustomizations — tenants carry their own
+               ServiceAccount and namespace so each one reconciles under its own identity rather than the
+               controller's.</p>
+            <a class="lnk" href="https://github.com/imad-elbouhati/flux-multi-tenancy">flux-multi-tenancy &rarr;</a>
+          </div>
+          <div class="fw">
+            <span class="fw-k">Go &middot; early stage</span>
+            <h4>kube-drift</h4>
+            <p>An operator for reconciling live resources against their Git source of truth. The CRD and
+               API are designed — <code>targetRef</code>, a validated Git <code>syncSource</code>, drift
+               status — and the controller is scaffolded but not yet implemented. Listed here as work in
+               progress, not as a finished project.</p>
+            <a class="lnk" href="https://github.com/imad-elbouhati/kube-drift">kube-drift &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= CAPABILITIES ========================= -->
+  <section id="capabilities" class="wrap sect">
+    <div class="sect-grid">
+      <div class="rail"><span class="idx">03</span>Capabilities<span class="rail-note">Grouped by where it sits in the stack.</span></div>
+      <div>
+        <div class="sect-head">
+          <h2>Technical capabilities</h2>
+          <p>Bold entries are the ones demonstrated in the case studies above. The rest I've used in
+             supporting work in this account.</p>
+        </div>
+        <div class="caps">
+          <div class="cap">
+            <h4>Orchestration &amp; containers</h4>
+            <ul>
+              <li><b>Kubernetes</b> — CRDs, controllers, RBAC, Pod Security Standards</li>
+              <li><b>Helm</b> — chart authoring, dependencies, release lifecycle</li>
+              <li><b>Kubebuilder / controller-runtime</b></li>
+              <li><b>Docker &amp; Docker Compose</b> — multi-stage, distroless</li>
+              <li>Kustomize &middot; OpenShift (oc, Routes, SCCs)</li>
+            </ul>
+          </div>
+          <div class="cap">
+            <h4>Cloud &amp; infrastructure as code</h4>
+            <ul>
+              <li><b>Terraform</b> — modules, providers, add-on pinning</li>
+              <li><b>AWS</b> — EKS, VPC, subnets, NAT, EBS</li>
+              <li><b>IAM</b> — roles, trust policies, OIDC federation, IRSA</li>
+              <li><b>Ansible</b> — roles, handlers, templates, Vault</li>
+              <li>Google Cloud</li>
+            </ul>
+          </div>
+          <div class="cap">
+            <h4>CI/CD &amp; delivery</h4>
+            <ul>
+              <li><b>GitLab CI</b> — staged pipelines, promotion, manual gates</li>
+              <li><b>GitHub Actions</b> — lint, unit and e2e workflows</li>
+              <li><b>Self-hosted runners</b> — Docker executor, registration</li>
+              <li><b>Flux CD</b> — GitOps reconciliation, multi-tenancy</li>
+              <li>golangci-lint &middot; container registries</li>
+            </ul>
+          </div>
+          <div class="cap">
+            <h4>Linux, networking &amp; security</h4>
+            <ul>
+              <li><b>nftables</b> — chains, conntrack vmaps, NAT, counters</li>
+              <li><b>WireGuard</b> — server config, routing, systemd units</li>
+              <li><b>Nginx</b> — TLS termination, reverse proxying, forwarded headers</li>
+              <li><b>TLS / ACME</b> — Let's Encrypt, DNS-01, automated renewal</li>
+              <li><b>systemd</b> — units, timers, persistent scheduling</li>
+              <li>SSH hardening &middot; fail2ban &middot; sysctl &middot; secrets handling</li>
+            </ul>
+          </div>
+          <div class="cap">
+            <h4>Observability &amp; reliability</h4>
+            <ul>
+              <li><b>Prometheus</b> — deployment, ServiceMonitor, metrics endpoints</li>
+              <li><b>Grafana</b> — provisioning behind an authenticated proxy</li>
+              <li><b>Alertmanager</b> — routing, grouping, repeat intervals</li>
+              <li><b>Kubernetes diagnostics</b> — events, conditions, describe, logs</li>
+              <li>Velero &amp; EBS snapshots — backup and restore</li>
+            </ul>
+          </div>
+          <div class="cap">
+            <h4>Languages &amp; tooling</h4>
+            <ul>
+              <li><b>Go</b> — operators, services, Ginkgo/Gomega, envtest</li>
+              <li><b>Bash</b> — provisioning, grading and automation scripts</li>
+              <li><b>YAML / Jinja2</b> — manifests, templates, Helm</li>
+              <li>Python &middot; Node.js &middot; SQL (PostgreSQL, MySQL)</li>
+              <li>Git — trunk-based flow, tags as release boundaries</li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= PHILOSOPHY ========================= -->
+  <section id="philosophy" class="wrap sect">
+    <div class="sect-grid">
+      <div class="rail"><span class="idx">04</span>Philosophy<span class="rail-note">Five rules I actually apply, each drawn from the code above.</span></div>
+      <div>
+        <div class="sect-head">
+          <h2>How I think about systems</h2>
+          <p>These aren't slogans — each one is a decision you can find in the repositories on this page.</p>
+        </div>
+        <div class="philo">
+          <div class="pr">
+            <h3>Reconcile, don't remember</h3>
+            <p>State should be declared and continuously converged, not applied once and hoped about.
+               That's why KubeGuard re-sweeps every five minutes instead of trusting its own event stream,
+               and why every Ansible task in infra-lab is safe to run again tomorrow.</p>
+          </div>
+          <div class="pr">
+            <h3>Exit code 0 is not success</h3>
+            <p>A renewal job ran monthly and reported success for months while the proxy kept serving an
+               expired-path certificate. Verification has to assert the observable outcome — the
+               certificate actually served, the pod actually Ready — not the return code of the thing that
+               was supposed to cause it.</p>
+          </div>
+          <div class="pr">
+            <h3>Default deny, then justify each opening</h3>
+            <p>Firewall chains start at <code>policy drop</code>. IAM trust policies name one service
+               account, not a wildcard. Containers run non-root with all capabilities dropped. Every
+               permission that exists should be traceable to a reason someone wrote down.</p>
+          </div>
+          <div class="pr">
+            <h3>Promote artifacts, don't rebuild them</h3>
+            <p>If production rebuilds from source, staging validated something else. Resolve the tag to the
+               commit, promote the image that already exists, and keep the guarantee that what you tested
+               is what you shipped.</p>
+          </div>
+          <div class="pr">
+            <h3>Make the system explain itself</h3>
+            <p>Status conditions, Kubernetes Events, correction annotations, named firewall counters. When
+               something goes wrong at 3am, the system should be able to tell you what it did and when —
+               without you reading its source code.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= CREDENTIALS ========================= -->
+  <section id="credentials" class="wrap sect">
+    <div class="sect-grid">
+      <div class="rail"><span class="idx">05</span>Credentials<span class="rail-note">Stated exactly as they stand.</span></div>
+      <div>
+        <div class="sect-head">
+          <h2>Certifications &amp; credentials</h2>
+          <p>Listed with their real status. Anything in preparation is labelled as such.</p>
+        </div>
+        <div class="creds">
+          <!-- TODO(imad): add your Credly / Red Hat verification link to each entry below,
+               and correct the status pills if anything here is out of date. -->
+          <div class="cred">
+            <div>
+              <h4>CKA — Certified Kubernetes Administrator</h4>
+              <p>Cloud Native Computing Foundation / Linux Foundation. Cluster administration,
+                 workloads, networking, storage and troubleshooting.</p>
+            </div>
+            <span class="pill held">Certified</span>
+          </div>
+          <div class="cred">
+            <div>
+              <h4>EX280 — Red Hat Certified OpenShift Administrator</h4>
+              <p>In preparation against the OCP 4.18 objectives. Study work is public: nine objective
+                 domains of hands-on labs with automated grading scripts that verify a live cluster,
+                 plus a mock exam.</p>
+            </div>
+            <span class="pill prep">In preparation</span>
+          </div>
+          <div class="cred">
+            <div>
+              <h4>Engineering degree — INPT</h4>
+              <p>Institut National des Postes et Télécommunications, Rabat, Morocco.</p>
+            </div>
+            <span class="pill prep">Graduate</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= PROOF ========================= -->
+  <section id="proof" class="wrap sect">
+    <div class="sect-grid">
+      <div class="rail"><span class="idx">06</span>Proof<span class="rail-note">Claim, then the file that backs it.</span></div>
+      <div>
+        <div class="sect-head">
+          <h2>Don't take my word for it</h2>
+          <p>Every significant claim on this page maps to a specific file in a public repository. Here is
+             the index — open any of them.</p>
+        </div>
+        <div class="tablewrap">
+          <table class="proof">
+            <thead>
+              <tr><th scope="col">Claim</th><th scope="col">Where it lives</th><th scope="col"></th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>I write Kubernetes controllers in Go</td>
+                <td><code>kubeguard-operator/internal/controller/guardpolicy_controller.go</code></td>
+                <td><a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/internal/controller/guardpolicy_controller.go">Open</a></td>
+              </tr>
+              <tr>
+                <td>I design CRDs with proper validation</td>
+                <td><code>kubeguard-operator/api/v1/guardpolicy_types.go</code></td>
+                <td><a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/api/v1/guardpolicy_types.go">Open</a></td>
+              </tr>
+              <tr>
+                <td>I write end-to-end tests, not just unit tests</td>
+                <td><code>kubeguard-operator/test/e2e/e2e_test.go</code></td>
+                <td><a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/test/e2e/e2e_test.go">Open</a></td>
+              </tr>
+              <tr>
+                <td>I ship hardened, non-root container images</td>
+                <td><code>kubeguard-operator/Dockerfile</code></td>
+                <td><a href="https://github.com/imad-elbouhati/kubeguard-operator/blob/main/Dockerfile">Open</a></td>
+              </tr>
+              <tr>
+                <td>I build AWS infrastructure in Terraform</td>
+                <td><code>microservices-deployment-eks-helm/terraform/eks.tf</code></td>
+                <td><a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/blob/main/terraform/eks.tf">Open</a></td>
+              </tr>
+              <tr>
+                <td>I scope IAM to individual workloads with IRSA</td>
+                <td><code>microservices-deployment-eks-helm/terraform/csi-driver-iam.tf</code></td>
+                <td><a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/blob/main/terraform/csi-driver-iam.tf">Open</a></td>
+              </tr>
+              <tr>
+                <td>I build promotion pipelines with manual production gates</td>
+                <td><code>microservices-deployment-eks-helm/.gitlab-ci.yml</code></td>
+                <td><a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/blob/main/.gitlab-ci.yml">Open</a></td>
+              </tr>
+              <tr>
+                <td>I author Helm charts</td>
+                <td><code>microservices-deployment-eks-helm/helm/</code></td>
+                <td><a href="https://github.com/imad-elbouhati/microservices-deployment-eks-helm/tree/main/helm">Open</a></td>
+              </tr>
+              <tr>
+                <td>I write production-shaped firewall rules</td>
+                <td><code>infra-lab/nftables/files/input.j2</code></td>
+                <td><a href="https://github.com/imad-elbouhati/infra-lab/blob/master/nftables/files/input.j2">Open</a></td>
+              </tr>
+              <tr>
+                <td>I diagnose silent failures, not just loud ones</td>
+                <td><code>infra-lab</code> &mdash; commit <code>ab475dc</code>, certbot renewal reload</td>
+                <td><a href="https://github.com/imad-elbouhati/infra-lab/commit/ab475dc">Open</a></td>
+              </tr>
+              <tr>
+                <td>I debug container networking at the packet-filter layer</td>
+                <td><code>infra-lab</code> &mdash; commit <code>54f3267</code>, forward chain</td>
+                <td><a href="https://github.com/imad-elbouhati/infra-lab/commit/54f3267">Open</a></td>
+              </tr>
+              <tr>
+                <td>I automate whole hosts with Ansible</td>
+                <td><code>infra-lab/setup.yaml</code> and its eight roles</td>
+                <td><a href="https://github.com/imad-elbouhati/infra-lab">Open</a></td>
+              </tr>
+              <tr>
+                <td>I know how to troubleshoot broken workloads systematically</td>
+                <td><code>ex280-prep/01-manage-ocp/lab2-troubleshooting/</code></td>
+                <td><a href="https://github.com/imad-elbouhati/ex280-prep">Open</a></td>
+              </tr>
+              <tr>
+                <td>I deliver with GitOps where it fits</td>
+                <td><code>flux-multi-tenancy/tenants/</code></td>
+                <td><a href="https://github.com/imad-elbouhati/flux-multi-tenancy">Open</a></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= PROCESS ========================= -->
+  <section id="process" class="wrap sect">
+    <div class="sect-grid">
+      <div class="rail"><span class="idx">07</span>Process<span class="rail-note">The order matters — I don't automate a system I haven't understood.</span></div>
+      <div>
+        <div class="sect-head">
+          <h2>How I work</h2>
+          <p>Four phases, in this order. On short engagements the first two may be all you need.</p>
+        </div>
+        <div class="steps">
+          <div class="step">
+            <span class="s-n">Phase 01</span>
+            <h4>Read before writing</h4>
+            <p>I start by mapping what you actually have — network path, permissions, deploy path, what
+               breaks and how you find out. No changes in this phase. You get a written assessment with the
+               risks ranked, and it's yours whether or not we continue.</p>
+          </div>
+          <div class="step">
+            <span class="s-n">Phase 02</span>
+            <h4>Stabilise the sharp edges</h4>
+            <p>Fix what is actively dangerous first: silent failures, over-broad credentials, missing
+               backups, alerts nobody receives. Small, reversible changes, each one verified by its
+               observable outcome rather than its exit code.</p>
+          </div>
+          <div class="step">
+            <span class="s-n">Phase 03</span>
+            <h4>Codify it</h4>
+            <p>Then the manual steps become Terraform, Ansible, Helm or a controller — whichever fits.
+               The test is simple: can this environment be rebuilt from an empty account, and does the
+               pipeline promote artifacts rather than rebuild them?</p>
+          </div>
+          <div class="step">
+            <span class="s-n">Phase 04</span>
+            <h4>Hand it over properly</h4>
+            <p>Your team owns the result: readable code, documented decisions including the trade-offs,
+               and runbooks for the failure modes we actually hit. I'd rather leave you independent than
+               indispensable to me.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========================= CONTACT ========================= -->
+  <section id="contact" class="wrap sect">
+    <div class="contact-in">
+      <p class="eyebrow"><span class="dot" aria-hidden="true"></span> Currently taking on new work</p>
+      <h2 style="margin-top:1.25rem;">Tell me what's breaking.</h2>
+      <p class="lede">
+        Whether it's a migration you can't schedule downtime for, a pipeline nobody trusts, a cluster
+        that needs guardrails, or an alert that's been firing for three weeks — send me the specifics.
+        You'll get a real technical reply, not a brochure.
+      </p>
+      <div class="hero-cta">
+        <a class="btn" href="mailto:elbouhatiimad@gmail.com?subject=DevOps%20project%20enquiry">Email me</a>
+        <a class="btn btn-ghost" href="https://linkedin.com/in/imad-el-bouhati">LinkedIn</a>
+        <a class="btn btn-ghost" href="https://github.com/imad-elbouhati">GitHub</a>
+      </div>
+
+      <dl class="contact-rows">
+        <div class="crow">
+          <dt>Email</dt>
+          <dd><a class="lnk" href="mailto:elbouhatiimad@gmail.com">elbouhatiimad@gmail.com</a></dd>
+        </div>
+        <div class="crow">
+          <dt>Engagements</dt>
+          <dd>Contract and freelance — infrastructure builds, platform work, reliability reviews, and
+              fixed-scope audits.</dd>
+        </div>
+        <div class="crow">
+          <dt>Working style</dt>
+          <dd>Remote, async-friendly, comfortable inside your repos and your on-call rotation.</dd>
+        </div>
+        <div class="crow">
+          <dt>Useful in your first message</dt>
+          <dd>Your stack, what's failing or blocked, and how you'd know it was fixed.</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <footer class="site wrap">
+    <span>Imad El Bouhati &middot; DevOps &amp; SRE</span>
+    <span><a href="https://github.com/imad-elbouhati">github.com/imad-elbouhati</a></span>
+  </footer>
+</main>
+
+<script>
+(function () {
+  if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  var els = document.querySelectorAll('.reveal');
+  if (!('IntersectionObserver' in window)) {
+    els.forEach(function (el) { el.classList.add('in'); });
+    return;
+  }
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (e) {
+      if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); }
+    });
+  }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+  els.forEach(function (el) { io.observe(el); });
+})();
+</script>
