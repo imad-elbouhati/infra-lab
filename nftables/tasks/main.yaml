@@ -5,9 +5,7 @@
     state: present
     update_cache: yes
   notify: restart nftables
-  vars: 
-    skip_nft_install: false
-  when: skip_nft_install
+  when: not skip_nft_install
 
 - name: copy ntftable configuration
   ansible.builtin.template:
