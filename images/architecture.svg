@@ -1,0 +1,126 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 680" font-family="'Segoe UI', system-ui, -apple-system, Roboto, sans-serif">
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#475569"/>
+    </marker>
+    <marker id="arrowLight" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M0,0 L10,5 L0,10 z" fill="#94a3b8"/>
+    </marker>
+  </defs>
+
+  <rect x="0" y="0" width="1200" height="680" fill="#ffffff" stroke="#e2e8f0" stroke-width="2" rx="10"/>
+  <text x="24" y="28" font-size="12" fill="#94a3b8">infra-lab — architecture overview</text>
+
+  <!-- Actors row -->
+  <g font-size="13" font-weight="600" fill="#1e293b">
+    <rect x="50" y="50" width="250" height="58" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+    <text x="175" y="75" text-anchor="middle">Internet / Clients</text>
+    <text x="175" y="93" text-anchor="middle" font-size="10.5" font-weight="400" fill="#64748b">HTTPS requests</text>
+
+    <rect x="475" y="50" width="250" height="58" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+    <text x="600" y="75" text-anchor="middle">Administrator</text>
+    <text x="600" y="93" text-anchor="middle" font-size="10.5" font-weight="400" fill="#64748b">WireGuard peer</text>
+
+    <rect x="900" y="50" width="250" height="58" rx="6" fill="#f1f5f9" stroke="#64748b" stroke-width="1.5"/>
+    <text x="1025" y="75" text-anchor="middle">Ansible Control Node</text>
+    <text x="1025" y="93" text-anchor="middle" font-size="10.5" font-weight="400" fill="#64748b">local / CI</text>
+  </g>
+
+  <!-- Arrows actors -> nftables -->
+  <line x1="175" y1="108" x2="255" y2="195" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="150" y="150" font-size="10" fill="#334155">HTTPS 80/443</text>
+
+  <line x1="600" y1="108" x2="600" y2="195" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="608" y="150" font-size="10" fill="#334155">WireGuard 51820/udp</text>
+
+  <line x1="1025" y1="108" x2="945" y2="195" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <text x="945" y="150" font-size="10" fill="#334155" text-anchor="end">SSH (hardened)</text>
+
+  <!-- VPS boundary -->
+  <rect x="30" y="140" width="1140" height="435" rx="10" fill="none" stroke="#334155" stroke-width="1.5" stroke-dasharray="6,4"/>
+  <text x="50" y="165" font-size="13" font-weight="700" fill="#0f172a">VPS — Ubuntu Server (Contabo)</text>
+  <text x="50" y="181" font-size="10.5" fill="#64748b">provisioned &amp; configured by Ansible</text>
+
+  <!-- nftables band -->
+  <rect x="60" y="195" width="1080" height="55" rx="6" fill="#fef3c7" stroke="#d97706" stroke-width="1.5"/>
+  <text x="600" y="216" text-anchor="middle" font-size="13" font-weight="700" fill="#78350f">nftables firewall — default-deny policy</text>
+  <text x="600" y="235" text-anchor="middle" font-size="10.5" fill="#78350f">input: 80/443 · SSH (custom port) · WireGuard 51820/udp · PostgreSQL 5432 (wg0-only) — forward: docker0/veth*/br-* allowed for NAT</text>
+
+  <!-- connectors nftables -> columns -->
+  <line x1="255" y1="250" x2="255" y2="280" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="605" y1="250" x2="605" y2="280" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+  <line x1="930" y1="250" x2="930" y2="280" stroke="#475569" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+  <!-- Column A: Docker Compose -->
+  <rect x="60" y="280" width="330" height="250" rx="8" fill="#eff6ff" stroke="#2563eb" stroke-width="1.5"/>
+  <text x="225" y="303" text-anchor="middle" font-size="12.5" font-weight="700" fill="#1e3a8a">DOCKER COMPOSE</text>
+
+  <rect x="75" y="325" width="300" height="45" rx="5" fill="#dbeafe" stroke="#93c5fd"/>
+  <text x="225" y="343" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">Nginx Reverse Proxy</text>
+  <text x="225" y="358" text-anchor="middle" font-size="10" fill="#1e40af">TLS termination · subdomain routing</text>
+
+  <line x1="225" y1="380" x2="225" y2="371" stroke="#2563eb" stroke-width="1.3" marker-end="url(#arrow)"/>
+  <rect x="75" y="380" width="300" height="45" rx="5" fill="#dbeafe" stroke="#93c5fd"/>
+  <text x="225" y="398" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">Certbot</text>
+  <text x="225" y="413" text-anchor="middle" font-size="10" fill="#1e40af">Let's Encrypt · DNS-01 · systemd timer renewal</text>
+  <text x="378" y="378" font-size="9.5" fill="#1e40af" text-anchor="start">renew → reload</text>
+
+  <rect x="75" y="435" width="300" height="45" rx="5" fill="#dbeafe" stroke="#93c5fd"/>
+  <text x="225" y="453" text-anchor="middle" font-size="12" font-weight="600" fill="#1e3a8a">GitLab Runner</text>
+  <text x="225" y="468" text-anchor="middle" font-size="10" fill="#1e40af">Docker executor · self-hosted CI</text>
+
+  <!-- Column B: Host Services -->
+  <rect x="420" y="280" width="330" height="250" rx="8" fill="#f0fdf4" stroke="#16a34a" stroke-width="1.5"/>
+  <text x="585" y="303" text-anchor="middle" font-size="12.5" font-weight="700" fill="#14532d">HOST SERVICES (systemd)</text>
+
+  <rect x="435" y="325" width="300" height="40" rx="5" fill="#dcfce7" stroke="#86efac"/>
+  <text x="585" y="342" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">Grafana</text>
+  <text x="585" y="356" text-anchor="middle" font-size="10" fill="#166534">dashboards, reverse-proxied via Nginx</text>
+
+  <rect x="435" y="373" width="300" height="40" rx="5" fill="#dcfce7" stroke="#86efac"/>
+  <text x="585" y="390" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">Prometheus</text>
+  <text x="585" y="404" text-anchor="middle" font-size="10" fill="#166534">metrics collection, reverse-proxied via Nginx</text>
+
+  <rect x="435" y="421" width="300" height="40" rx="5" fill="#dcfce7" stroke="#86efac"/>
+  <text x="585" y="438" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">PostgreSQL</text>
+  <text x="585" y="452" text-anchor="middle" font-size="10" fill="#166534">port 5432, firewall + listen_addresses scoped to wg0</text>
+
+  <rect x="435" y="469" width="300" height="40" rx="5" fill="#dcfce7" stroke="#86efac"/>
+  <text x="585" y="486" text-anchor="middle" font-size="12" font-weight="600" fill="#14532d">sshd + fail2ban</text>
+  <text x="585" y="500" text-anchor="middle" font-size="10" fill="#166534">key-only auth, hardened ciphers, brute-force jail</text>
+
+  <!-- Column C: WireGuard -->
+  <rect x="780" y="280" width="300" height="250" rx="8" fill="#f5f3ff" stroke="#7c3aed" stroke-width="1.5"/>
+  <text x="930" y="303" text-anchor="middle" font-size="12.5" font-weight="700" fill="#4c1d95">WIREGUARD VPN</text>
+
+  <rect x="795" y="325" width="270" height="45" rx="5" fill="#ede9fe" stroke="#c4b5fd"/>
+  <text x="930" y="343" text-anchor="middle" font-size="12" font-weight="600" fill="#4c1d95">wg0 interface</text>
+  <text x="930" y="358" text-anchor="middle" font-size="10" fill="#5b21b6">10.43.43.1/24 · UDP 51820</text>
+
+  <rect x="795" y="380" width="270" height="45" rx="5" fill="#ede9fe" stroke="#c4b5fd"/>
+  <text x="930" y="398" text-anchor="middle" font-size="12" font-weight="600" fill="#4c1d95">Administrator peer</text>
+  <text x="930" y="413" text-anchor="middle" font-size="10" fill="#5b21b6">10.43.43.2/32</text>
+
+  <rect x="795" y="435" width="270" height="45" rx="5" fill="#ede9fe" stroke="#c4b5fd"/>
+  <text x="930" y="453" text-anchor="middle" font-size="11.5" font-weight="600" fill="#4c1d95">Administrative access path</text>
+  <text x="930" y="468" text-anchor="middle" font-size="10" fill="#5b21b6">only route to PostgreSQL (firewall + DB scoped)</text>
+
+  <!-- cross-column dotted relationships -->
+  <line x1="375" y1="345" x2="435" y2="343" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrowLight)"/>
+  <line x1="375" y1="350" x2="435" y2="392" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrowLight)"/>
+  <line x1="795" y1="400" x2="735" y2="440" stroke="#94a3b8" stroke-width="1.2" stroke-dasharray="3,3" marker-end="url(#arrowLight)"/>
+
+  <text x="1148" y="572" font-size="9.5" fill="#94a3b8" text-anchor="end">roles: bootstrap · nftables · wireguard · postgres · nginx-reverse-proxy · certbot · gitlab-runner · monitoring</text>
+
+  <!-- External SaaS -->
+  <rect x="230" y="600" width="300" height="55" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="4,3"/>
+  <text x="380" y="622" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">Cloudflare DNS</text>
+  <text x="380" y="638" text-anchor="middle" font-size="10" fill="#64748b">DNS-01 ACME challenge (outbound)</text>
+
+  <rect x="670" y="600" width="300" height="55" rx="6" fill="#f8fafc" stroke="#94a3b8" stroke-width="1.3" stroke-dasharray="4,3"/>
+  <text x="820" y="622" text-anchor="middle" font-size="12" font-weight="600" fill="#334155">GitLab.com (SaaS)</text>
+  <text x="820" y="638" text-anchor="middle" font-size="10" fill="#64748b">CI job dispatch (outbound polling)</text>
+
+  <line x1="260" y1="425" x2="370" y2="600" stroke="#475569" stroke-width="1.3" stroke-dasharray="2,2" marker-end="url(#arrow)"/>
+  <line x1="280" y1="480" x2="790" y2="600" stroke="#475569" stroke-width="1.3" stroke-dasharray="2,2" marker-end="url(#arrow)"/>
+</svg>

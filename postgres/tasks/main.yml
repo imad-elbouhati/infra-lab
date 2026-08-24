@@ -1,11 +1,36 @@
 ---
 
 - name: Update apt cache
-  apt:
+  ansible.builtin.apt:
     update_cache: yes
 
 - name: Install PostgreSQL
-  apt:
+  ansible.builtin.apt:
     name:
       - postgresql
     state: present
+
+- name: Locate PostgreSQL configuration directory
+  ansible.builtin.find:
+    paths: /etc/postgresql
+    patterns: 'postgresql.conf'
+    recurse: true
+  register: postgres_conf_search
+
+- name: Set PostgreSQL configuration directory fact
+  ansible.builtin.set_fact:
+    postgres_conf_dir: "{{ postgres_conf_search.files[0].path | dirname }}"
+
+- name: Listen only on localhost and the WireGuard interface
+  ansible.builtin.lineinfile:
+    path: "{{ postgres_conf_dir }}/postgresql.conf"
+    regexp: '^#?listen_addresses\s*='
+    line: "listen_addresses = 'localhost,{{ postgres_wireguard_listen_ip }}'"
+  notify: restart postgresql
+
+- name: Allow client connections only from the WireGuard subnet
+  ansible.builtin.lineinfile:
+    path: "{{ postgres_conf_dir }}/pg_hba.conf"
+    line: "host    all             all             {{ postgres_wireguard_subnet }}          scram-sha-256"
+    insertafter: EOF
+  notify: restart postgresql
